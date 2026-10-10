@@ -1,0 +1,1257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f4ee" />
+  <meta name="description" content="Savour Recipe Studio: beautiful food photos, detailed ingredients and methods, and YouTube cooking tutorials embedded right on the page." />
+  <title>Savour — Recipe Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #fffdfb;
+      --paper-2: #ffffff;
+      --ink: #241c1b;
+      --muted: #827875;
+      --green: #e85d45;
+      --green-dark: #bd3f31;
+      --orange: #e7a63a;
+      --line: rgba(102, 63, 53, .13);
+      --glass: rgba(255, 255, 255, .82);
+      --shadow: 0 24px 70px rgba(91, 50, 41, .09);
+      --radius-xl: 30px;
+      --radius-lg: 22px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 84% 6%, rgba(245, 137, 111, .14), transparent 25rem),
+        radial-gradient(circle at 4% 38%, rgba(255, 208, 134, .17), transparent 26rem),
+        #fffdfb;
+      font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      overflow-x: hidden;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    a { color: inherit; }
+    .page-shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+      padding: 22px 0; border-bottom: 1px solid var(--line);
+    }
+    .brand { display: inline-flex; align-items: center; gap: 11px; text-decoration: none; font-weight: 700; letter-spacing: -.04em; font-size: 1.35rem; }
+    .brand-mark { width: 37px; height: 37px; display: grid; place-items: center; border-radius: 13px; color: white; background: var(--green); box-shadow: 0 8px 20px rgba(54, 88, 67, .23); font-size: 1.15rem; }
+    .brand span:last-child { font-family: "Playfair Display", Georgia, serif; letter-spacing: -.025em; }
+    .top-note { color: var(--muted); font-size: .82rem; display: flex; align-items: center; gap: 8px; }
+    .live-dot { width: 7px; height: 7px; background: #6f9c69; border-radius: 50%; box-shadow: 0 0 0 5px rgba(111,156,105,.12); }
+
+    .hero { display: grid; grid-template-columns: 1fr .92fr; align-items: center; gap: clamp(28px, 5vw, 70px); padding: clamp(48px, 7vw, 88px) 0 68px; min-height: 505px; }
+    .eyebrow { display: flex; align-items: center; gap: 10px; text-transform: uppercase; letter-spacing: .16em; font-size: .72rem; font-weight: 700; color: var(--green); margin: 0 0 20px; }
+    .eyebrow::before { content: ""; width: 27px; height: 1px; background: var(--orange); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 660px; margin-bottom: 19px; font: 600 clamp(2.7rem, 5.6vw, 5.15rem)/1.03 "Playfair Display", Georgia, serif; letter-spacing: -.055em; }
+    h1 em { font-style: italic; color: var(--green); }
+    .hero-copy { max-width: 480px; color: var(--muted); font-size: 1.03rem; line-height: 1.8; margin-bottom: 29px; }
+    .search-panel { display: flex; align-items: center; gap: 10px; width: min(590px, 100%); padding: 8px; background: rgba(255,255,255,.76); border: 1px solid rgba(255,255,255,.9); border-radius: 18px; box-shadow: 0 18px 50px rgba(49, 60, 45, .10); backdrop-filter: blur(16px); }
+    .search-icon { width: 42px; min-width: 42px; height: 42px; display: grid; place-items: center; color: var(--green); }
+    .search-panel input { min-width: 0; flex: 1; border: 0; outline: 0; color: var(--ink); background: transparent; padding: 12px 4px; font-size: .95rem; }
+    .search-panel input::placeholder { color: #a0a196; }
+    .primary-btn, .secondary-btn, .icon-btn { border: 0; transition: transform .22s ease, box-shadow .22s ease, background .22s ease; }
+    .primary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; padding: 13px 19px; border-radius: 13px; color: white; font-weight: 700; background: var(--green); box-shadow: 0 9px 20px rgba(232,93,69,.18); white-space: nowrap; }
+    .primary-btn:hover { background: var(--green-dark); transform: translateY(-2px); box-shadow: 0 13px 24px rgba(232,93,69,.25); }
+    .secondary-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 11px 14px; color: var(--green-dark); font-weight: 700; background: rgba(255,255,255,.65); border: 1px solid var(--line); border-radius: 13px; }
+    .secondary-btn:hover, .icon-btn:hover { transform: translateY(-2px); background: white; }
+    .examples { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 16px; color: var(--muted); font-size: .79rem; }
+    .examples button { padding: 7px 11px; border: 1px solid var(--line); border-radius: 99px; background: transparent; color: #5c665a; font-size: .78rem; transition: all .2s ease; }
+    .examples button:hover { border-color: var(--green); color: var(--green); background: rgba(255,255,255,.6); }
+
+    .hero-art { position: relative; min-width: 0; padding: 20px 16px 25px 24px; }
+    .art-glow { position: absolute; width: 75%; aspect-ratio: 1; right: 8%; top: 10%; border-radius: 50%; background: #ffe0c8; filter: blur(1px); opacity: .7; }
+    .art-ring { position: absolute; width: 91%; aspect-ratio: 1; right: 2%; top: 0; border: 1px solid rgba(232,93,69,.18); border-radius: 50%; transform: rotate(-18deg); }
+    .roast-reveal { position: relative; z-index: 1; width: min(100%, 470px); margin-left: auto; animation: slideUp .95s cubic-bezier(.2,.75,.25,1) both; }
+    .roast-card { position: relative; padding: 11px; border-radius: 42% 42% 28px 28px; background: rgba(255,255,255,.53); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 30px 70px rgba(70,56,37,.17); transform: rotate(2deg); animation: floatRoast 6s ease-in-out infinite; }
+    .roast-card img { display: block; width: 100%; aspect-ratio: .92; object-fit: cover; border-radius: 40% 40% 22px 22px; }
+    .image-stamp { position: absolute; left: -22px; bottom: 42px; width: 110px; height: 110px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border-radius: 50%; background: var(--green); color: #fffaf0; border: 5px solid var(--paper); box-shadow: 0 12px 24px rgba(37,62,48,.19); transform: rotate(-10deg); }
+    .image-stamp strong { font: 600 1.6rem/1 "Playfair Display", Georgia, serif; }
+    .image-stamp span { margin-top: 7px; font-size: .58rem; letter-spacing: .11em; text-transform: uppercase; }
+    .floating-note { position: absolute; z-index: 2; right: -4px; top: 18%; padding: 12px 16px; background: rgba(255,255,255,.84); backdrop-filter: blur(12px); border: 1px solid white; border-radius: 15px; box-shadow: 0 12px 32px rgba(49,60,45,.1); animation: bob 4.5s ease-in-out infinite; }
+    .floating-note b { display: block; font-size: .83rem; }
+    .floating-note small { color: var(--muted); font-size: .71rem; }
+
+    .marquee-wrap { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: rgba(255,255,255,.28); }
+    .marquee-track { display: flex; width: max-content; align-items: center; gap: 28px; padding: 13px 0; animation: marquee 29s linear infinite; }
+    .marquee-track span { display: inline-flex; align-items: center; gap: 13px; white-space: nowrap; font: 600 1rem "Playfair Display", Georgia, serif; color: var(--green); }
+    .marquee-track img { width: 35px; height: 35px; object-fit: cover; border-radius: 50%; border: 2px solid white; }
+    .marquee-track .spark { color: var(--orange); font-family: sans-serif; font-size: 1.2rem; }
+
+    .main-content { padding: 66px 0 90px; }
+    .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 24px; }
+    .section-heading h2 { font: 600 clamp(1.8rem, 3vw, 2.65rem)/1.1 "Playfair Display", Georgia, serif; letter-spacing: -.04em; margin-bottom: 7px; }
+    .section-heading p { color: var(--muted); margin: 0; font-size: .92rem; }
+    .api-note { color: #777b70; font-size: .74rem; text-align: right; max-width: 240px; line-height: 1.55; }
+    .status { margin: 0 0 18px; padding: 13px 15px; border-radius: 14px; color: var(--green-dark); background: rgba(255,255,255,.62); border: 1px solid var(--line); font-size: .9rem; display: none; }
+    .status.show { display: block; animation: fadeIn .3s ease both; }
+    .status.error { color: #8d3e2f; background: rgba(255,244,239,.85); border-color: rgba(214,108,67,.2); }
+    .status.success { color: var(--green-dark); }
+    .recipe-layout { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr); gap: 22px; align-items: start; }
+    .recipe-main, .side-card { border: 1px solid rgba(255,255,255,.86); background: var(--glass); backdrop-filter: blur(18px); box-shadow: var(--shadow); border-radius: var(--radius-xl); overflow: hidden; }
+    .recipe-main { min-height: 250px; }
+    .empty-state { min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 36px; }
+    .empty-plate { width: 83px; height: 83px; display: grid; place-items: center; border-radius: 28px; font-size: 2.4rem; background: #e9eee5; margin-bottom: 18px; animation: bob 4s ease-in-out infinite; }
+    .empty-state h3 { font: 600 1.65rem "Playfair Display", Georgia, serif; margin-bottom: 9px; }
+    .empty-state p { max-width: 420px; color: var(--muted); font-size: .92rem; line-height: 1.7; margin: 0; }
+    .recipe-head { display: grid; grid-template-columns: 168px minmax(0, 1fr); gap: 22px; padding: 22px; align-items: center; }
+    .recipe-thumb { width: 168px; aspect-ratio: .92; border-radius: 19px; object-fit: cover; background: #ece6db; }
+    .recipe-kicker { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 10px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border-radius: 99px; font-size: .68rem; font-weight: 700; letter-spacing: .025em; color: var(--green); background: #e9eee6; }
+    .recipe-title { margin: 0 0 10px; font: 600 clamp(1.5rem, 2.8vw, 2.25rem)/1.1 "Playfair Display", Georgia, serif; letter-spacing: -.035em; }
+    .recipe-subtitle { color: var(--muted); font-size: .85rem; line-height: 1.6; margin: 0; }
+    .recipe-actions { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 22px 22px; }
+    .recipe-actions .secondary-btn { font-size: .78rem; padding: 10px 12px; }
+    .recipe-divider { height: 1px; margin: 0 22px; background: var(--line); }
+    .video-section { padding: 22px; }
+    .subhead { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 14px; }
+    .subhead h3 { margin: 0; font: 600 1.32rem "Playfair Display", Georgia, serif; letter-spacing: -.025em; }
+    .subhead span { color: var(--muted); font-size: .76rem; }
+    .video-frame { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 18px; background: #20271f; }
+    .video-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-fallback { display: flex; position: absolute; inset: 0; align-items: center; justify-content: center; flex-direction: column; gap: 13px; padding: 24px; text-align: center; color: white; background: linear-gradient(135deg, rgba(32,39,31,.94), rgba(54,88,67,.9)); }
+    .play-orb { width: 54px; height: 54px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.14); font-size: 1.1rem; backdrop-filter: blur(8px); }
+    .video-fallback p { margin: 0; color: rgba(255,255,255,.74); font-size: .82rem; max-width: 330px; line-height: 1.5; }
+    .video-fallback a { text-decoration: none; display: inline-block; padding: 10px 14px; background: white; color: var(--green-dark); font-size: .78rem; font-weight: 700; border-radius: 10px; }
+    .side-card { padding: 24px; }
+    .side-card + .side-card { margin-top: 22px; }
+    .ingredient-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 6px; }
+    .ingredient-top h3, .steps-card h3 { font: 600 1.55rem "Playfair Display", Georgia, serif; margin: 0; letter-spacing: -.035em; }
+    .small-count { font-size: .72rem; color: var(--muted); }
+    .progress-track { height: 5px; overflow: hidden; margin: 14px 0 19px; border-radius: 99px; background: #e9e6dd; }
+    .progress-fill { height: 100%; width: 0%; border-radius: inherit; background: var(--green); transition: width .3s ease; }
+    .ingredients-list { display: grid; gap: 3px; }
+    .ingredient-row { display: flex; align-items: flex-start; gap: 11px; padding: 10px 0; border-bottom: 1px dashed var(--line); cursor: pointer; color: #454d43; font-size: .85rem; line-height: 1.5; }
+    .ingredient-row:last-child { border-bottom: 0; }
+    .ingredient-row input { position: absolute; opacity: 0; pointer-events: none; }
+    .custom-check { flex: 0 0 19px; width: 19px; height: 19px; border: 1.5px solid #bdc5b8; border-radius: 6px; margin-top: 1px; display: grid; place-items: center; color: white; font-size: .7rem; transition: all .2s ease; }
+    .ingredient-row input:checked + .custom-check { background: var(--green); border-color: var(--green); }
+    .ingredient-row input:checked + .custom-check::after { content: "✓"; }
+    .ingredient-row:has(input:checked) .ingredient-text { color: #969a90; text-decoration: line-through; }
+    .shopping-actions { display: flex; gap: 8px; margin-top: 18px; }
+    .shopping-actions button { flex: 1; font-size: .76rem; }
+    .steps-card { padding: 25px; }
+    .steps-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
+    .steps-list { display: grid; gap: 18px; list-style: none; margin: 0; padding: 0; counter-reset: cooking-step; }
+    .steps-list li { position: relative; display: grid; grid-template-columns: 34px 1fr; gap: 13px; align-items: start; color: #545b51; font-size: .87rem; line-height: 1.75; counter-increment: cooking-step; }
+    .step-number { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px; font-weight: 700; color: var(--green); background: #e8eee5; font-size: .79rem; }
+    .voice-note { margin: 19px 0 0; padding: 12px 13px; background: #eff1e9; color: #65705f; border-radius: 12px; font-size: .76rem; line-height: 1.55; }
+    .footer { padding: 24px 0 32px; border-top: 1px solid var(--line); color: var(--muted); display: flex; justify-content: space-between; gap: 20px; font-size: .76rem; }
+    .footer b { color: var(--green); }
+
+    .loading { padding: 30px; }
+    .skeleton { border-radius: 12px; background: linear-gradient(100deg, #ece9e1 20%, #f8f6ef 40%, #ece9e1 60%); background-size: 200% 100%; animation: shimmer 1.3s ease-in-out infinite; }
+    .skeleton-row { display: flex; gap: 18px; }
+    .skeleton-image { width: 155px; min-width: 155px; height: 155px; border-radius: 18px; }
+    .skeleton-lines { display: grid; align-content: center; gap: 12px; flex: 1; }
+    .skeleton-line { height: 13px; }
+    .skeleton-line.large { width: 75%; height: 24px; }
+    .skeleton-line.medium { width: 90%; }
+    .skeleton-line.small { width: 55%; }
+
+
+    /* Savour Plus: bright editorial recipe discovery, with the original floating roast preserved. */
+    .topbar { gap: 18px; }
+    .top-nav { display: flex; align-items: center; justify-content: center; gap: clamp(12px, 2.3vw, 28px); margin-left: auto; }
+    .top-nav a { text-decoration: none; color: #625552; font-weight: 700; font-size: .81rem; transition: color .2s ease; }
+    .top-nav a:hover { color: var(--green); }
+    .nav-favorites { display: inline-flex; align-items: center; gap: 7px; padding: 9px 13px; border: 1px solid rgba(232,93,69,.18); border-radius: 999px; background: #fff5f1; color: var(--green-dark); font-weight: 800; font-size: .78rem; }
+    .nav-favorites span { display: inline-grid; place-items: center; min-width: 19px; height: 19px; padding: 0 4px; border-radius: 50%; background: white; color: var(--green-dark); font-size: .7rem; }
+    .brand-mark { background: linear-gradient(135deg, #f27b5e, #d9483d); }
+    .primary-btn { background: linear-gradient(135deg, #ed6c50, #dc4e3e); }
+    .primary-btn:hover { background: linear-gradient(135deg, #db5b43, #bb3c31); }
+    .search-panel { border-color: rgba(232,93,69,.12); }
+    .discover-section { padding: 45px 0 18px; }
+    .discover-header { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 25px; }
+    .discover-header h2 { margin: 0 0 9px; font: 600 clamp(2rem, 3.3vw, 3.1rem)/1.08 "Playfair Display", Georgia, serif; letter-spacing: -.045em; }
+    .discover-header p:not(.eyebrow) { margin: 0; color: var(--muted); max-width: 640px; font-size: .94rem; line-height: 1.7; }
+    .surprise-btn { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 9px; padding: 13px 17px; border: 1px solid rgba(232,93,69,.18); border-radius: 14px; color: var(--green-dark); background: linear-gradient(135deg, #fff5ef, #fffdf9); box-shadow: 0 10px 25px rgba(159,76,54,.08); font-weight: 800; transition: transform .2s ease, box-shadow .2s ease; }
+    .surprise-btn span { color: var(--green); font-size: 1.1rem; }
+    .surprise-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(159,76,54,.13); }
+    .discover-tools { display: grid; gap: 15px; margin-bottom: 26px; }
+    .category-chips { display: flex; gap: 9px; overflow-x: auto; padding: 2px 1px 10px; scrollbar-width: thin; scrollbar-color: #f0c5b9 transparent; }
+    .category-chip { flex: 0 0 auto; display: inline-flex; align-items: center; gap: 7px; padding: 10px 14px; border: 1px solid #eee3df; border-radius: 999px; color: #655450; background: rgba(255,255,255,.9); white-space: nowrap; font-size: .79rem; font-weight: 750; box-shadow: 0 3px 12px rgba(70,37,29,.025); transition: all .2s ease; }
+    .category-chip:hover { border-color: #f0b4a5; color: var(--green-dark); transform: translateY(-2px); }
+    .category-chip.active { color: white; border-color: var(--green); background: linear-gradient(135deg, #ed7258, #dc4d40); box-shadow: 0 8px 18px rgba(220,77,64,.19); }
+    .cuisine-explorer { padding: 16px 17px 3px; border: 1px solid rgba(232,93,69,.10); border-radius: 18px; background: linear-gradient(135deg, rgba(255,255,255,.86), rgba(255,246,241,.62)); }
+    .cuisine-label { display: flex; align-items: baseline; flex-wrap: wrap; gap: 10px; margin: 0 0 12px; }
+    .cuisine-label strong { color: #4c332d; font: 600 1.02rem "Playfair Display", Georgia, serif; }
+    .cuisine-label span { color: var(--muted); font-size: .75rem; }
+    .cuisine-chips { padding-bottom: 11px; }
+    .cuisine-chips .category-chip { background: rgba(255,255,255,.96); }
+    .cuisine-chips .category-chip.active { color: white; background: linear-gradient(135deg, #ed7258, #dc4d40); }
+    .ingredient-search { width: min(100%, 550px); display: flex; align-items: center; gap: 10px; padding: 6px 7px 6px 14px; border: 1px solid #eee3df; border-radius: 15px; background: white; box-shadow: 0 8px 25px rgba(70,37,29,.035); }
+    .ingredient-search > span { color: var(--green); font-size: 1.4rem; }
+    .ingredient-search input { min-width: 0; flex: 1; border: 0; outline: 0; padding: 10px 0; background: transparent; color: var(--ink); font-size: .84rem; }
+    .ingredient-search .secondary-btn { flex: 0 0 auto; padding: 10px 13px; font-size: .76rem; }
+    .browse-heading { display: flex; align-items: end; justify-content: space-between; gap: 15px; margin: 28px 0 16px; }
+    .browse-heading h3 { font: 600 1.55rem/1.2 "Playfair Display", Georgia, serif; letter-spacing: -.03em; margin: 0 0 5px; }
+    .browse-heading p { margin: 0; color: var(--muted); font-size: .83rem; line-height: 1.6; }
+    .result-count { display: inline-flex; align-items: center; gap: 6px; flex: 0 0 auto; padding: 7px 10px; border-radius: 999px; color: #936052; background: #fff2ec; font-size: .73rem; font-weight: 800; }
+    .recipe-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 17px; }
+    .discover-card { min-width: 0; overflow: hidden; border: 1px solid rgba(133,83,67,.11); border-radius: 20px; background: white; box-shadow: 0 10px 26px rgba(82,46,35,.055); animation: cardIn .42s ease both; transition: transform .23s ease, box-shadow .23s ease, border-color .23s ease; }
+    .discover-card:hover { transform: translateY(-5px); border-color: rgba(232,93,69,.24); box-shadow: 0 18px 35px rgba(82,46,35,.11); }
+    .discover-image-wrap { position: relative; overflow: hidden; aspect-ratio: 1.28; background: #fff0e9; cursor: pointer; }
+    .discover-image { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .55s cubic-bezier(.2,.7,.3,1); }
+    .discover-card:hover .discover-image { transform: scale(1.055); }
+    .card-category { position: absolute; left: 11px; bottom: 11px; padding: 6px 9px; border: 1px solid rgba(255,255,255,.75); border-radius: 999px; background: rgba(255,255,255,.88); backdrop-filter: blur(10px); color: #7f493d; font-size: .65rem; font-weight: 800; }
+    .favorite-toggle { position: absolute; top: 10px; right: 10px; display: grid; place-items: center; width: 35px; height: 35px; border: 1px solid rgba(255,255,255,.83); border-radius: 50%; background: rgba(255,255,255,.88); color: #8a6d65; box-shadow: 0 4px 14px rgba(55,29,21,.09); font-size: 1.05rem; transition: all .2s ease; }
+    .favorite-toggle:hover, .favorite-toggle.saved { color: #d94740; background: white; transform: scale(1.08); }
+    .discover-card-body { padding: 13px 14px 15px; }
+    .discover-card-title { min-height: 2.55em; margin: 0 0 12px; font: 600 1.02rem/1.25 "Playfair Display", Georgia, serif; letter-spacing: -.015em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .discover-card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .card-hint { color: var(--muted); font-size: .7rem; }
+    .open-recipe-btn { border: 0; padding: 8px 10px; border-radius: 10px; background: #fff0eb; color: var(--green-dark); font-size: .72rem; font-weight: 850; white-space: nowrap; transition: all .2s ease; }
+    .open-recipe-btn:hover { background: var(--green); color: white; }
+    .browse-loading, .browse-empty { grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 210px; border: 1px dashed #efd7ce; border-radius: 22px; background: rgba(255,255,255,.68); color: var(--muted); text-align: center; }
+    .browse-loading b, .browse-empty b { color: var(--ink); font-family: "Playfair Display", Georgia, serif; font-size: 1.2rem; }
+    .browse-loading > span:last-child, .browse-empty p { margin: 0; font-size: .82rem; }
+    .loader-orbit { width: 30px; height: 30px; border: 3px solid #f9d8ce; border-top-color: var(--green); border-radius: 50%; animation: spin .8s linear infinite; }
+    .load-more-wrap { display: flex; justify-content: center; padding: 24px 0 4px; }
+    .load-more-wrap .secondary-btn { padding: 12px 18px; background: white; }
+    .source-note { margin: 18px 0 0; color: #a19893; font-size: .71rem; line-height: 1.6; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .home-featured { padding: 34px 0 20px; }
+    .featured-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin: 0 0 22px; }
+    .featured-heading h2 { margin: 0 0 9px; font: 600 clamp(1.9rem, 3.2vw, 2.8rem)/1.08 "Playfair Display", Georgia, serif; letter-spacing: -.045em; }
+    .featured-heading p:not(.eyebrow) { margin: 0; color: var(--muted); max-width: 640px; font-size: .92rem; line-height: 1.7; }
+    .home-picks-grid .discover-card { box-shadow: 0 15px 34px rgba(82,46,35,.075); }
+    .home-picks-grid .discover-image-wrap { aspect-ratio: 1.16; }
+    .home-picks-grid .discover-card-body { padding: 15px 15px 16px; }
+    .featured-random-label { position: absolute; top: 11px; left: 11px; z-index: 1; padding: 6px 9px; border-radius: 999px; color: #8a4738; background: rgba(255,255,255,.9); backdrop-filter: blur(8px); font-size: .65rem; font-weight: 850; }
+    .video-fallback { background: radial-gradient(circle at 80% 12%, rgba(238,111,80,.24), transparent 40%), linear-gradient(135deg, #251f1e, #51362f); }
+    .video-fallback .video-note-icon { width: 58px; height: 58px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.36); border-radius: 19px; color: #fff; background: rgba(255,255,255,.1); font-size: 1.6rem; }
+    .video-fallback strong { font-family: "Playfair Display", Georgia, serif; font-size: 1.15rem; }
+    .video-fallback p { max-width: 390px; }
+    .chef-tip { margin: 20px 0 0; padding: 15px 16px; border: 1px solid rgba(232,93,69,.14); border-radius: 14px; background: linear-gradient(135deg, #fff8f4, #fffdf9); color: #655149; font-size: .82rem; line-height: 1.7; }
+    .chef-tip strong { display: block; margin-bottom: 4px; color: #b84d39; font: 600 1rem "Playfair Display", Georgia, serif; }
+    .chef-tip p { margin: 0; }
+    .video-player-area { position: relative; overflow: hidden; border-radius: 18px; background: #1e1a19; }
+    .video-player-area .video-fallback { position: relative; inset: auto; min-height: 260px; border-radius: 18px; }
+    .video-player-wrap { position: relative; overflow: hidden; aspect-ratio: 16 / 9; border-radius: 18px; background: #1e1a19; }
+    .video-player-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+    .video-caption { margin-top: 10px; color: var(--muted); font-size: .72rem; line-height: 1.55; }
+    .video-section .subhead .inline-label { display: inline-flex; align-items: center; gap: 6px; padding: 6px 9px; border-radius: 999px; background: #fff2ec; color: #a8523d; font-weight: 750; }
+    @media (max-width: 720px) { .featured-heading { align-items: start; flex-direction: column; } .home-picks-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 480px) { .home-picks-grid .discover-image-wrap { aspect-ratio: 1.05; } .home-picks-grid .discover-card-body { padding: 10px; } }
+
+    @media (max-width: 1000px) { .recipe-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } .top-note { display: none; } }
+    @media (max-width: 720px) { .top-nav { gap: 12px; } .top-nav a { font-size: .75rem; } .recipe-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; } .discover-card { border-radius: 16px; } .discover-card-body { padding: 11px; } .discover-card-title { font-size: .92rem; } .discover-header { align-items: start; flex-direction: column; } .surprise-btn { align-self: flex-start; } }
+    @media (max-width: 480px) { .topbar { flex-wrap: wrap; } .top-nav { order: 3; width: 100%; justify-content: space-between; padding-top: 5px; } .recipe-grid { gap: 10px; } .discover-image-wrap { aspect-ratio: 1.05; } .browse-heading { align-items: start; flex-direction: column; } .ingredient-search { gap: 7px; padding-left: 10px; } .ingredient-search input { font-size: .76rem; } .ingredient-search .secondary-btn { padding: 10px 9px; font-size: .7rem; } }
+
+    @keyframes slideUp { from { opacity: 0; transform: translateY(42px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes floatRoast { 0%,100% { transform: translateY(0) rotate(2deg); } 50% { transform: translateY(-11px) rotate(1deg); } }
+    @keyframes bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+    @keyframes marquee { to { transform: translateX(-50%); } }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes shimmer { to { background-position-x: -200%; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr .8fr; gap: 22px; }
+      .hero-art { padding-left: 8px; padding-right: 5px; }
+      .image-stamp { width: 88px; height: 88px; left: -12px; }
+      .image-stamp strong { font-size: 1.3rem; }
+      .recipe-layout { grid-template-columns: 1fr; }
+      .right-column { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; align-items: start; }
+      .side-card + .side-card { margin-top: 0; }
+    }
+    @media (max-width: 650px) {
+      .page-shell { width: min(100% - 28px, 540px); }
+      .topbar { padding: 16px 0; }
+      .top-note { font-size: .72rem; }
+      .hero { grid-template-columns: 1fr; padding: 43px 0 43px; gap: 20px; }
+      h1 { max-width: 530px; font-size: clamp(2.75rem, 12vw, 4rem); }
+      .hero-copy { font-size: .93rem; }
+      .hero-art { width: min(100%, 390px); margin: 0 auto; padding: 7px 20px 14px; }
+      .roast-card img { aspect-ratio: 1.08; }
+      .floating-note { right: 0; top: 17%; }
+      .image-stamp { bottom: 22px; }
+      .main-content { padding: 48px 0 58px; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .api-note { max-width: none; text-align: left; }
+      .right-column { display: flex; flex-direction: column; }
+      .right-column > * { width: 100%; }
+      .recipe-head { grid-template-columns: 98px 1fr; gap: 14px; padding: 16px; }
+      .recipe-thumb { width: 98px; border-radius: 14px; }
+      .recipe-title { font-size: 1.48rem; }
+      .recipe-actions { padding: 0 16px 17px; }
+      .recipe-divider { margin: 0 16px; }
+      .video-section { padding: 17px 16px; }
+      .side-card { padding: 19px; }
+      .steps-card { padding: 20px; }
+      .search-panel { gap: 5px; }
+      .search-icon { width: 30px; min-width: 30px; }
+      .primary-btn { padding: 12px 13px; font-size: .84rem; }
+      .footer { flex-direction: column; gap: 7px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="#top" aria-label="Savour home"><span class="brand-mark">✳</span><span>Savour.</span></a>
+      <nav class="top-nav" aria-label="Main navigation">
+        <a href="#today">Today’s picks</a>
+        <a href="#explore">Explore recipes</a>
+        <a href="#recipe-section">Cooking desk</a>
+        <button type="button" class="nav-favorites" id="showFavorites">♡ Saved <span id="favoriteCount">0</span></button>
+      </nav>
+      <div class="top-note"><span class="live-dot"></span> A little inspiration for your kitchen</div>
+    </header>
+
+    <main id="top">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-text">
+          <p class="eyebrow">Your everyday recipe companion</p>
+          <h1 id="hero-title">Good food starts with <em>one idea.</em></h1>
+          <p class="hero-copy">Search a dish to see professional food photos, measured ingredients, a detailed cooking method, and an embedded video when a tutorial is available. Less searching, more savoring.</p>
+          <form class="search-panel" id="searchForm">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <input id="recipeInput" type="search" placeholder="Search cakes, biryani, pasta, cookies…" aria-label="Recipe name" autocomplete="off" required />
+            <button class="primary-btn" id="searchButton" type="submit">Find recipe <span aria-hidden="true">↗</span></button>
+          </form>
+          <div class="examples"><span>Try:</span>
+            <button type="button" data-query="Chocolate cake">Chocolate cake</button>
+            <button type="button" data-query="Cheesecake">Cheesecake</button>
+            <button type="button" data-query="Brownies">Brownies</button>
+            <button type="button" data-query="Pancakes">Pancakes</button>
+            <button type="button" data-query="Chicken Alfredo">Chicken Alfredo</button>
+            <button type="button" data-query="Biryani">Biryani</button>
+            <button type="button" data-query="Butter chicken">Butter chicken</button>
+            <button type="button" data-query="Cookies">Cookies</button>
+            <button type="button" data-query="Lasagne">Lasagne</button>
+          </div>
+        </div>
+        <div class="hero-art" aria-label="Roast chicken food photography">
+          <div class="art-glow"></div><div class="art-ring"></div>
+          <div class="roast-reveal">
+            <div class="roast-card">
+              <img id="heroRoast" src="https://itsonly.recipes/images/recipeimages/grandmas-roast-chicken.webp" alt="Golden roast chicken with herbs and roasted vegetables" />
+              <div class="image-stamp"><strong>Made</strong><span>with love</span></div>
+            </div>
+          </div>
+          <div class="floating-note"><b>Something delicious</b><small>is just a search away ✨</small></div>
+        </div>
+      </section>
+
+      <div class="marquee-wrap" aria-label="Food inspiration ticker">
+        <div class="marquee-track" aria-hidden="true">
+          <span><img src="https://itsonly.recipes/images/recipeimages/grandmas-roast-chicken.webp" alt="" /> Sunday roast energy</span><span class="spark">✳</span>
+          <span>Good ingredients, great memories</span><span class="spark">✳</span>
+          <span><img src="https://itsonly.recipes/images/recipeimages/grandmas-roast-chicken.webp" alt="" /> Find your next favourite</span><span class="spark">✳</span>
+          <span>Something warm is on the menu</span><span class="spark">✳</span>
+          <span><img src="https://itsonly.recipes/images/recipeimages/grandmas-roast-chicken.webp" alt="" /> Sunday roast energy</span><span class="spark">✳</span>
+          <span>Good ingredients, great memories</span><span class="spark">✳</span>
+          <span><img src="https://itsonly.recipes/images/recipeimages/grandmas-roast-chicken.webp" alt="" /> Find your next favourite</span><span class="spark">✳</span>
+          <span>Something warm is on the menu</span><span class="spark">✳</span>
+        </div>
+      </div>
+
+      <section class="home-featured" id="today" aria-labelledby="today-title">
+        <div class="featured-heading">
+          <div>
+            <p class="eyebrow">A fresh idea, every visit</p>
+            <h2 id="today-title">Today’s random picks.</h2>
+            <p>Food photography, quick inspiration, and recipes you can open without leaving this page.</p>
+          </div>
+          <button class="surprise-btn" id="shuffleHomePicks" type="button"><span>⟳</span> Shuffle picks</button>
+        </div>
+        <div id="featuredGrid" class="recipe-grid home-picks-grid" aria-live="polite">
+          <div class="browse-loading"><span class="loader-orbit"></span><b>Picking something delicious…</b><span>Fresh recipes for your homepage</span></div>
+        </div>
+      </section>
+
+      <section class="discover-section page-shell" id="explore" aria-labelledby="discover-title">
+        <div class="discover-header">
+          <div>
+            <p class="eyebrow">A whole world on your plate</p>
+            <h2 id="discover-title">What are you craving?</h2>
+            <p>Explore a growing built-in cookbook alongside online dishes, browse by cuisine, or search by the ingredients already in your kitchen.</p>
+          </div>
+          <button type="button" class="surprise-btn" id="surpriseMe"><span>✦</span> Surprise me</button>
+        </div>
+        <div class="discover-tools">
+          <div class="category-chips" id="categoryChips" aria-label="Filter recipes by category">
+            <button type="button" class="category-chip active" data-category="all">✦ All recipes</button>
+            <button type="button" class="category-chip" data-category="Cakes & Bakes">🎂 Cakes & bakes</button>
+            <button type="button" class="category-chip" data-category="Dessert">🍰 Desserts</button>
+            <button type="button" class="category-chip" data-category="Breakfast">🥞 Breakfast</button>
+            <button type="button" class="category-chip" data-category="Chicken">🍗 Chicken</button>
+            <button type="button" class="category-chip" data-category="Beef">🥩 Beef</button>
+            <button type="button" class="category-chip" data-category="Seafood">🐟 Seafood</button>
+            <button type="button" class="category-chip" data-category="Pasta">🍝 Pasta</button>
+            <button type="button" class="category-chip" data-category="Vegetarian">🥑 Vegetarian</button>
+            <button type="button" class="category-chip" data-category="Vegan">🌱 Vegan</button>
+            <button type="button" class="category-chip" data-category="Pork">🍖 Pork</button>
+            <button type="button" class="category-chip" data-category="Lamb">🍲 Lamb</button>
+            <button type="button" class="category-chip" data-category="Starter">🥗 Starters</button>
+            <button type="button" class="category-chip" data-category="Side">🥔 Sides</button>
+            <button type="button" class="category-chip" data-category="Goat">🍛 Goat</button>
+            <button type="button" class="category-chip" data-category="Miscellaneous">🍽️ More meals</button>
+          </div>
+          <div class="cuisine-explorer">
+            <div class="cuisine-label"><strong>Explore by cuisine</strong><span>Discover flavours from around the world</span></div>
+            <div class="category-chips cuisine-chips" id="cuisineChips" aria-label="Filter recipes by cuisine">
+              <button type="button" class="category-chip" data-area="Indian">🇮🇳 Indian</button>
+              <button type="button" class="category-chip" data-area="Italian">🇮🇹 Italian</button>
+              <button type="button" class="category-chip" data-area="Mexican">🇲🇽 Mexican</button>
+              <button type="button" class="category-chip" data-area="Chinese">🇨🇳 Chinese</button>
+              <button type="button" class="category-chip" data-area="American">🇺🇸 American</button>
+              <button type="button" class="category-chip" data-area="British">🇬🇧 British</button>
+              <button type="button" class="category-chip" data-area="Japanese">🇯🇵 Japanese</button>
+              <button type="button" class="category-chip" data-area="Thai">🇹🇭 Thai</button>
+              <button type="button" class="category-chip" data-area="French">🇫🇷 French</button>
+              <button type="button" class="category-chip" data-area="Greek">🇬🇷 Greek</button>
+              <button type="button" class="category-chip" data-area="Moroccan">🇲🇦 Moroccan</button>
+              <button type="button" class="category-chip" data-area="Turkish">🇹🇷 Turkish</button>
+              <button type="button" class="category-chip" data-area="Jamaican">🇯🇲 Jamaican</button>
+              <button type="button" class="category-chip" data-area="Vietnamese">🇻🇳 Vietnamese</button>
+              <button type="button" class="category-chip" data-area="Spanish">🇪🇸 Spanish</button>
+              <button type="button" class="category-chip" data-area="Canadian">🇨🇦 Canadian</button>
+              <button type="button" class="category-chip" data-area="Pakistani">🇵🇰 Pakistani</button>
+              <button type="button" class="category-chip" data-area="Middle Eastern">🧆 Middle Eastern</button>
+              <button type="button" class="category-chip" data-area="Mediterranean">🫒 Mediterranean</button>
+            </div>
+          </div>
+          <form class="ingredient-search" id="ingredientSearchForm">
+            <span aria-hidden="true">⌕</span>
+            <input id="ingredientInput" type="search" placeholder="Have an ingredient? Try salmon or chicken" aria-label="Find recipes by ingredient" autocomplete="off" required />
+            <button type="submit" class="secondary-btn">Find dishes</button>
+          </form>
+        </div>
+        <div class="browse-heading">
+          <div><h3 id="browseTitle">A little bit of everything</h3><p id="browseDescription">Browse the collection, then select any card for ingredients and cooking steps.</p></div>
+          <span id="browseCount" class="result-count">Loading recipe ideas…</span>
+        </div>
+        <div id="recipeGrid" class="recipe-grid" aria-live="polite">
+          <div class="browse-loading"><span class="loader-orbit"></span><b>Setting the table…</b><span>Finding delicious ideas for you</span></div>
+        </div>
+        <div class="load-more-wrap"><button type="button" class="secondary-btn" id="loadMoreBtn" hidden>Show more recipes ↓</button></div>
+        <p class="source-note">Savour includes a built-in cookbook with ingredients and cooking steps, plus dishes from TheMealDB. Online images and video links require an internet connection.</p>
+      </section>
+
+      <section class="main-content" id="recipe-section" aria-labelledby="recipes-heading">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">From search to supper</p>
+            <h2 id="recipes-heading">Your cooking desk.</h2>
+            <p>Select a dish above or search for one to open its ingredients, video and step-by-step method.</p>
+          </div>
+          <div class="api-note">Built-in cookbook plus TheMealDB's free learning API. Online results and videos depend on availability.</div>
+        </div>
+        <div id="status" class="status" role="status" aria-live="polite"></div>
+        <div class="recipe-layout">
+          <section class="recipe-main" id="recipeMain" aria-live="polite">
+            <div class="empty-state">
+              <div class="empty-plate">🍽️</div>
+              <h3>What are we cooking today?</h3>
+              <p>Enter a recipe name above to bring up a dish with its ingredient list, step-by-step method, and video tutorial if available. You can also start with one of the suggestions.</p>
+            </div>
+          </section>
+          <div class="right-column">
+            <section class="side-card" id="ingredientsCard">
+              <div class="ingredient-top"><h3>Ingredients</h3><span class="small-count" id="ingredientCount">Waiting for recipe</span></div>
+              <div class="progress-track"><div class="progress-fill" id="ingredientProgress"></div></div>
+              <div class="ingredients-list" id="ingredientsList"><p style="color:var(--muted);font-size:.88rem;line-height:1.7;margin:10px 0 0;">Your ingredients will appear here, ready for your shopping and prep.</p></div>
+              <div class="shopping-actions"><button class="secondary-btn" id="copyIngredients" type="button" disabled>▣ Copy list</button><button class="secondary-btn" id="resetIngredients" type="button" disabled>↻ Reset checks</button></div>
+            </section>
+            <section class="side-card steps-card" id="stepsCard">
+              <div class="steps-head"><h3>How to make it</h3><span class="small-count" id="stepCount">0 steps</span></div>
+              <ol class="steps-list" id="stepsList"><li><span class="step-number">—</span><span>Your cooking instructions will appear here when you search for a recipe.</span></li></ol>
+              <div class="chef-tip" id="chefTip" hidden></div>
+              <p class="voice-note">🔊 Use “Read recipe aloud” to hear the method. Voice availability depends on your browser and device.</p>
+            </section>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer"><span><b>Savour.</b> Your bright little recipe universe.</span><span>Made for curious cooks · Baked with a little joy ✦</span></footer>
+  </div>
+
+  <script>
+    // Savour uses TheMealDB's public test API key for learning projects.
+    const API_BASE = "https://www.themealdb.com/api/json/v1/1";
+    const ROAST_IMAGE = "https://itsonly.recipes/images/recipeimages/grandmas-roast-chicken.webp";
+    const ROAST_IMAGE_BACKUP = "https://allinabox.co.uk/cdn/shop/products/RoastChicken_1-RESIZE_8095b318-a606-4ec5-a744-52af75151cfd.jpg?v=1645048420&width=1024";
+    const $ = (selector) => document.querySelector(selector);
+    const searchForm = $("#searchForm");
+    const recipeInput = $("#recipeInput");
+    const searchButton = $("#searchButton");
+    const statusBox = $("#status");
+    const recipeMain = $("#recipeMain");
+    const ingredientsList = $("#ingredientsList");
+    const stepsList = $("#stepsList");
+    const copyIngredientsButton = $("#copyIngredients");
+    const resetIngredientsButton = $("#resetIngredients");
+    let currentMeal = null;
+    let currentIngredients = [];
+    let latestQueryMeals = [];
+    let activeBrowseMeals = [];
+    let visibleBrowseCount = 12;
+    let currentBrowseMode = "category";
+    let activeCardCategory = "Recipe idea";
+    let browseCache = new Map();
+    const FAVOURITES_STORAGE_KEY = "savour-recipe-favourites-v2";
+    let favouriteMeals = readFavourites();
+
+    // Local fallback makes the roast-chicken demo work even if the recipe API is unavailable.
+    const localRoastChicken = {
+      idMeal: "local-roast-chicken",
+      strMeal: "Golden Roast Chicken", strCategory: "Chicken", strArea: "Home Kitchen",
+      strMealThumb: ROAST_IMAGE, strYoutube: "",
+      strInstructions: "Heat the oven to 220°C (425°F). Pat the chicken dry with paper towels.\nMix olive oil or softened butter with salt, black pepper, minced garlic, lemon zest, rosemary, and thyme. Rub this mixture all over the chicken and a little inside the cavity.\nPlace the onion, carrot, and lemon in a roasting tray. Sit the chicken on top, breast-side up, and tuck the wing tips under.\nRoast for 15 minutes, then reduce the oven to 190°C (375°F) and continue cooking for about 60–75 minutes, depending on the size of the chicken. Baste once or twice if you like.\nCheck the thickest part of the thigh with a food thermometer; it should reach 74°C (165°F). If needed, continue cooking and check again.\nRest the chicken for 10–15 minutes before carving. Serve with the roasted vegetables and pan juices.",
+      strIngredient1: "Whole chicken", strMeasure1: "1 (about 1.5 kg)",
+      strIngredient2: "Olive oil or softened butter", strMeasure2: "2 tablespoons",
+      strIngredient3: "Garlic", strMeasure3: "4 cloves, minced",
+      strIngredient4: "Lemon", strMeasure4: "1, halved",
+      strIngredient5: "Fresh rosemary", strMeasure5: "2 sprigs",
+      strIngredient6: "Fresh thyme", strMeasure6: "3 sprigs",
+      strIngredient7: "Salt", strMeasure7: "1 teaspoon, or to taste",
+      strIngredient8: "Black pepper", strMeasure8: "½ teaspoon",
+      strIngredient9: "Carrot", strMeasure9: "2, roughly chopped",
+      strIngredient10: "Onion", strMeasure10: "1, quartered"
+    };
+
+    // A curated, built-in cookbook gives the site many more useful recipes and lets
+    // common dishes open even when the online API is unavailable.
+    const LOCAL_FOOD_IMAGES = {
+      cake: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=900&q=85",
+      dessert: "https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&w=900&q=85",
+      cookies: "https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=900&q=85",
+      bread: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=85",
+      breakfast: "https://images.unsplash.com/photo-1528207776546-365bb710ee93?auto=format&fit=crop&w=900&q=85",
+      chicken: "https://images.unsplash.com/photo-1532550907401-a500c9a57435?auto=format&fit=crop&w=900&q=85",
+      meat: "https://images.unsplash.com/photo-1600891964599-f61ba0e24092?auto=format&fit=crop&w=900&q=85",
+      pasta: "https://images.unsplash.com/photo-1473093295043-cdd812d0e601?auto=format&fit=crop&w=900&q=85",
+      pizza: "https://images.unsplash.com/photo-1579751626657-72bc17010498?auto=format&fit=crop&w=900&q=85",
+      rice: "https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=900&q=85",
+      indian: "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=85",
+      seafood: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=900&q=85",
+      salad: "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=900&q=85",
+      soup: "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=900&q=85",
+      vegetable: "https://images.unsplash.com/photo-1512621776951-a57141eefd?auto=format&fit=crop&w=900&q=85",
+      asian: "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=900&q=85",
+      burger: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=85",
+      mexican: "https://images.unsplash.com/photo-1552332386-f8dd00dc2f85?auto=format&fit=crop&w=900&q=85",
+      drink: "https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=900&q=85"
+    };
+    // Each entry: id, title, category, cuisine, photo style, ingredients, steps.
+    const LOCAL_RECIPE_DATA = [
+      ["chocolate-fudge-cake","Chocolate Fudge Cake","Dessert","American","cake",[["All-purpose flour","1½ cups"],["Cocoa powder","½ cup"],["Sugar","1 cup"],["Baking powder","1½ tsp"],["Eggs","2"],["Milk","1 cup"],["Vegetable oil","½ cup"],["Vanilla extract","1 tsp"],["Hot coffee or water","½ cup"]],["Heat the oven to 175°C (350°F) and grease two 8-inch cake tins.","Whisk flour, cocoa, sugar and baking powder in a bowl. Add eggs, milk, oil and vanilla; mix until smooth, then stir in the hot coffee or water.","Divide the batter between the tins and bake for 25–32 minutes, until a skewer comes out clean.","Cool completely, then sandwich and cover with chocolate frosting."]],
+      ["vanilla-sponge-cake","Vanilla Sponge Cake","Dessert","British","cake",[["All-purpose flour","2 cups"],["Sugar","1 cup"],["Butter, softened","¾ cup"],["Eggs","3"],["Milk","½ cup"],["Baking powder","2 tsp"],["Vanilla extract","2 tsp"]],["Heat oven to 175°C (350°F) and line two 8-inch tins.","Beat butter and sugar until pale and fluffy. Beat in eggs one at a time, then vanilla.","Fold in flour and baking powder alternately with milk until just combined.","Bake 25–30 minutes. Cool before adding cream, jam or frosting."]],
+      ["red-velvet-cake","Red Velvet Cake","Dessert","American","cake",[["All-purpose flour","2½ cups"],["Sugar","1½ cups"],["Cocoa powder","1 tbsp"],["Eggs","2"],["Buttermilk","1 cup"],["Butter or oil","¾ cup"],["Red food colouring","as directed"],["Baking soda","1 tsp"],["White vinegar","1 tsp"]],["Heat oven to 175°C (350°F) and grease two cake tins.","Whisk flour and cocoa. Beat sugar with butter or oil, add eggs, buttermilk and red colouring.","Fold in dry ingredients, then stir in baking soda and vinegar.","Bake 25–30 minutes, cool fully, and cover with cream-cheese frosting."]],
+      ["carrot-cake","Carrot Cake","Dessert","American","cake",[["Grated carrots","2 cups"],["All-purpose flour","2 cups"],["Brown sugar","1 cup"],["Eggs","3"],["Neutral oil","¾ cup"],["Cinnamon","2 tsp"],["Baking powder","2 tsp"],["Chopped walnuts","½ cup, optional"]],["Heat oven to 175°C (350°F) and grease a 9-inch tin.","Mix flour, sugar, cinnamon and baking powder. Whisk eggs and oil separately.","Combine wet and dry mixtures; fold in carrots and walnuts.","Bake 35–45 minutes until set. Cool and finish with cream-cheese frosting if desired."]],
+      ["new-york-cheesecake","New York Cheesecake","Dessert","American","dessert",[["Cream cheese","680 g"],["Sugar","1 cup"],["Eggs","3"],["Sour cream","1 cup"],["Vanilla extract","2 tsp"],["Digestive biscuit crumbs","2 cups"],["Melted butter","6 tbsp"]],["Heat oven to 160°C (325°F). Mix biscuit crumbs with melted butter and press into a springform tin.","Beat cream cheese and sugar until smooth; mix in eggs one at a time, then sour cream and vanilla.","Pour onto the crust and bake about 55–65 minutes, until the edges are set and the centre still wobbles slightly.","Cool slowly, then chill for at least 4 hours before slicing."]],
+      ["fudgy-brownies","Fudgy Chocolate Brownies","Dessert","American","dessert",[["Dark chocolate","200 g"],["Butter","½ cup"],["Sugar","1 cup"],["Eggs","3"],["All-purpose flour","¾ cup"],["Cocoa powder","¼ cup"],["Salt","¼ tsp"]],["Heat oven to 175°C (350°F) and line a square baking tin.","Melt chocolate and butter together; let cool slightly, then whisk in sugar and eggs.","Fold in flour, cocoa and salt until just combined. Spread in the tin.","Bake 20–25 minutes for a fudgy centre. Cool fully before cutting."]],
+      ["chocolate-chip-cookies","Chocolate Chip Cookies","Dessert","American","cookies",[["All-purpose flour","2¼ cups"],["Butter, softened","¾ cup"],["Brown sugar","¾ cup"],["White sugar","½ cup"],["Egg","1"],["Vanilla extract","2 tsp"],["Baking soda","1 tsp"],["Chocolate chips","1½ cups"]],["Heat oven to 180°C (350°F) and line a baking tray.","Cream butter with both sugars. Beat in egg and vanilla.","Mix in flour and baking soda, then fold through chocolate chips.","Scoop onto the tray and bake 9–12 minutes until the edges are golden. Cool on the tray briefly."]],
+      ["oatmeal-cookies","Oatmeal Raisin Cookies","Dessert","American","cookies",[["Rolled oats","1½ cups"],["All-purpose flour","¾ cup"],["Butter","½ cup"],["Brown sugar","¾ cup"],["Egg","1"],["Cinnamon","1 tsp"],["Raisins","½ cup"],["Baking soda","½ tsp"]],["Heat oven to 175°C (350°F) and prepare a lined tray.","Cream butter and sugar; beat in egg.","Stir in flour, oats, cinnamon and baking soda, then fold in raisins.","Spoon onto the tray and bake 10–13 minutes. Let the cookies set before moving them."]],
+      ["banana-bread","Banana Bread","Dessert","American","bread",[["Very ripe bananas","3"],["All-purpose flour","1½ cups"],["Sugar","¾ cup"],["Egg","1"],["Melted butter","⅓ cup"],["Baking soda","1 tsp"],["Salt","¼ tsp"]],["Heat oven to 175°C (350°F) and grease a loaf pan.","Mash bananas, then mix with sugar, egg and melted butter.","Fold in flour, baking soda and salt just until combined.","Bake 50–60 minutes, until a skewer inserted in the centre comes out clean. Cool before slicing."]],
+      ["apple-crumble","Apple Crumble","Dessert","British","dessert",[["Apples, peeled and sliced","5 cups"],["Sugar","⅓ cup"],["Cinnamon","1 tsp"],["All-purpose flour","1 cup"],["Rolled oats","½ cup"],["Cold butter","½ cup"],["Brown sugar","½ cup"]],["Heat oven to 180°C (350°F). Toss apples with sugar and cinnamon in a baking dish.","Rub flour, oats, brown sugar and cold butter together until crumbly.","Scatter the crumble over the apples.","Bake 35–45 minutes until golden and bubbling. Rest briefly and serve warm."]],
+      ["cinnamon-rolls","Cinnamon Rolls","Dessert","American","bread",[["All-purpose flour","3 cups"],["Warm milk","1 cup"],["Instant yeast","2¼ tsp"],["Sugar","¼ cup"],["Butter, melted","¼ cup"],["Brown sugar","½ cup"],["Cinnamon","1 tbsp"],["Soft butter for filling","3 tbsp"]],["Mix warm milk, yeast, sugar, melted butter and flour into a soft dough; knead until smooth and let rise until doubled.","Roll dough into a rectangle and spread with soft butter, brown sugar and cinnamon.","Roll up, slice into buns and place in a greased dish. Let rise for 30–45 minutes.","Bake at 180°C (350°F) for 20–25 minutes until golden. Add a simple icing if you like."]],
+      ["blueberry-muffins","Blueberry Muffins","Dessert","American","cake",[["All-purpose flour","2 cups"],["Sugar","¾ cup"],["Baking powder","2 tsp"],["Egg","1"],["Milk","¾ cup"],["Melted butter","⅓ cup"],["Blueberries","1 cup"]],["Heat oven to 190°C (375°F) and line a muffin tray.","Whisk flour, sugar and baking powder. In another bowl mix egg, milk and butter.","Combine wet and dry ingredients gently; fold in blueberries without overmixing.","Divide between muffin cups and bake 18–22 minutes until risen and lightly golden."]],
+      ["lemon-drizzle-cake","Lemon Drizzle Cake","Dessert","British","cake",[["Butter","¾ cup"],["Sugar","¾ cup"],["Eggs","3"],["Self-raising flour","1½ cups"],["Lemon zest","2 lemons"],["Lemon juice","3 tbsp"],["Powdered sugar","½ cup"]],["Heat oven to 175°C (350°F) and line a loaf tin.","Beat butter and sugar until fluffy, then beat in eggs and lemon zest.","Fold in flour, spoon into the tin and bake 40–50 minutes.","Mix lemon juice with powdered sugar and drizzle over the warm cake. Cool before slicing."]],
+      ["tiramisu","Tiramisu","Dessert","Italian","dessert",[["Ladyfinger biscuits","24"],["Strong espresso, cooled","1 cup"],["Mascarpone","450 g"],["Heavy cream","1 cup"],["Sugar","⅓ cup"],["Cocoa powder","for dusting"]],["Whip cream with sugar until soft peaks form, then gently fold in mascarpone.","Quickly dip ladyfingers into the cooled espresso and arrange a layer in a dish.","Spread half the mascarpone mixture over the biscuits; repeat the layers.","Cover and chill at least 4 hours. Dust generously with cocoa before serving."]],
+      ["chocolate-mousse","Chocolate Mousse","Dessert","French","dessert",[["Dark chocolate","200 g"],["Heavy cream","1½ cups"],["Eggs, separated","3"],["Sugar","2 tbsp"]],["Melt chocolate gently and let it cool until lukewarm.","Whip cream to soft peaks. Whisk egg yolks into the chocolate.","Beat egg whites with sugar until glossy peaks form, then fold into the chocolate with the cream.","Divide into glasses and refrigerate for at least 3 hours. For a safer no-raw-egg version, use pasteurised eggs or omit the egg whites."]],
+      ["chocolate-cupcakes","Chocolate Cupcakes","Dessert","American","cake",[["All-purpose flour","1½ cups"],["Sugar","1 cup"],["Cocoa powder","⅓ cup"],["Eggs","2"],["Milk","¾ cup"],["Oil","⅓ cup"],["Baking powder","1½ tsp"]],["Heat oven to 175°C (350°F) and line a 12-cup muffin tray.","Whisk flour, sugar, cocoa and baking powder in a bowl.","Add eggs, milk and oil; mix just until smooth and divide between cases.","Bake 18–22 minutes. Cool completely before piping on frosting."]],
+      ["pumpkin-pie","Pumpkin Pie","Dessert","American","dessert",[["Pie crust","1, 9-inch"],["Pumpkin puree","2 cups"],["Evaporated milk","1 cup"],["Eggs","2"],["Brown sugar","¾ cup"],["Cinnamon","1 tsp"],["Ground ginger","½ tsp"]],["Heat oven to 220°C (425°F). Fit the crust into a pie dish.","Whisk pumpkin puree, milk, eggs, sugar and spices until smooth.","Pour into the crust and bake 15 minutes.","Lower oven to 175°C (350°F) and bake 35–45 minutes more, until the centre is almost set. Cool before cutting."]],
+      ["strawberry-shortcake","Strawberry Shortcake","Dessert","American","dessert",[["Strawberries, sliced","3 cups"],["Sugar","¼ cup"],["All-purpose flour","2 cups"],["Baking powder","1 tbsp"],["Cold butter","½ cup"],["Heavy cream","1 cup, plus for serving"]],["Toss strawberries with a little sugar and leave to release their juices.","Mix flour and baking powder; rub in cold butter, then add enough cream to form a soft dough.","Shape into rounds and bake at 220°C (425°F) for 12–15 minutes until golden.","Split the shortcakes and layer with strawberries and whipped cream."]],
+      ["chocolate-lava-cake","Chocolate Lava Cakes","Dessert","French","dessert",[["Dark chocolate","120 g"],["Butter","½ cup"],["Eggs","2"],["Egg yolks","2"],["Sugar","¼ cup"],["All-purpose flour","¼ cup"]],["Heat oven to 220°C (425°F) and butter four ramekins.","Melt chocolate and butter together until smooth.","Whisk eggs, yolks and sugar until thick; fold in chocolate and flour.","Divide into ramekins and bake 9–12 minutes. Rest 1 minute, then carefully turn out; centres should remain molten."]],
+      ["donuts","Easy Baked Doughnuts","Dessert","American","bread",[["All-purpose flour","2 cups"],["Sugar","⅓ cup"],["Baking powder","2 tsp"],["Milk","¾ cup"],["Egg","1"],["Melted butter","3 tbsp"],["Vanilla extract","1 tsp"]],["Heat oven to 180°C (350°F) and grease a doughnut pan.","Whisk flour, sugar and baking powder. Mix milk, egg, butter and vanilla separately.","Fold wet ingredients into dry ingredients and pipe into the pan.","Bake 10–13 minutes. Cool and glaze or dust with cinnamon sugar."]],
+      ["pancakes","Fluffy Pancakes","Breakfast","American","breakfast",[["All-purpose flour","1½ cups"],["Milk","1¼ cups"],["Egg","1"],["Baking powder","2 tsp"],["Sugar","2 tbsp"],["Melted butter","2 tbsp"],["Salt","¼ tsp"]],["Whisk flour, baking powder, sugar and salt.","Beat milk, egg and melted butter; stir into the dry ingredients until just combined.","Cook small ladles of batter in a lightly buttered pan over medium heat. Flip when bubbles appear.","Cook the second side until golden and serve with fruit, honey or syrup."]],
+      ["french-toast","French Toast","Breakfast","French","breakfast",[["Bread slices","6"],["Eggs","2"],["Milk","½ cup"],["Cinnamon","½ tsp"],["Vanilla extract","1 tsp"],["Butter","for the pan"]],["Whisk eggs, milk, cinnamon and vanilla in a shallow bowl.","Dip each bread slice into the mixture and let excess drip off.","Cook in a buttered frying pan over medium heat for 2–3 minutes per side until golden.","Serve warm with fruit, honey, jam or powdered sugar."]],
+      ["waffles","Crispy Waffles","Breakfast","American","breakfast",[["All-purpose flour","2 cups"],["Milk","1¾ cups"],["Eggs","2"],["Melted butter","⅓ cup"],["Baking powder","1 tbsp"],["Sugar","2 tbsp"]],["Preheat and lightly grease a waffle iron.","Whisk flour, baking powder and sugar. In another bowl beat milk, eggs and melted butter.","Combine mixtures until no dry patches remain; allow the batter to rest for 5 minutes.","Cook portions in the waffle iron until crisp and golden. Serve with your favourite toppings."]],
+      ["cheese-omelette","Cheese Omelette","Breakfast","French","breakfast",[["Eggs","3"],["Cheddar cheese, grated","¼ cup"],["Butter","1 tsp"],["Milk","1 tbsp, optional"],["Salt and black pepper","to taste"],["Chives","1 tbsp, optional"]],["Beat eggs with salt, pepper and milk if using.","Melt butter in a non-stick pan over medium-low heat and pour in eggs.","As the eggs set, gently draw the edges inward and tilt the pan so uncooked egg reaches the surface.","Add cheese and chives, fold the omelette and cook until just set."]],
+      ["shakshuka","Tomato and Egg Shakshuka","Breakfast","Tunisian","indian",[["Eggs","4"],["Chopped tomatoes","1 can, 400 g"],["Red bell pepper","1"],["Onion","1"],["Garlic","3 cloves"],["Paprika","1 tsp"],["Cumin","½ tsp"],["Olive oil","1 tbsp"]],["Heat oil in a skillet and soften chopped onion and pepper for 6–8 minutes.","Add garlic, paprika and cumin, then stir in tomatoes. Simmer until thick, about 10 minutes.","Make four wells in the sauce and crack an egg into each one.","Cover and cook gently until the whites are set. Garnish with herbs and serve with bread."]],
+      ["avocado-toast","Avocado Toast","Breakfast","American","breakfast",[["Bread slices","2"],["Ripe avocado","1"],["Lemon juice","1 tsp"],["Chilli flakes","to taste"],["Salt and black pepper","to taste"],["Eggs","2, optional"]],["Toast the bread until crisp.","Mash avocado with lemon juice, salt and pepper.","Spread avocado over the toast and add chilli flakes.","Top with a fried or poached egg if desired and serve immediately."]],
+      ["overnight-oats","Berry Overnight Oats","Breakfast","American","breakfast",[["Rolled oats","½ cup"],["Milk or oat milk","½ cup"],["Yogurt","¼ cup"],["Chia seeds","1 tsp"],["Honey","1 tsp, optional"],["Mixed berries","½ cup"]],["Stir oats, milk, yogurt, chia seeds and honey in a jar.","Cover and refrigerate for at least 4 hours or overnight.","Stir in a splash of milk if the oats are too thick.","Top with mixed berries and enjoy chilled."]],
+      ["chicken-biryani","Chicken Biryani","Chicken","Pakistani","indian",[["Chicken pieces","700 g"],["Basmati rice","2 cups"],["Onions, sliced","2"],["Yogurt","¾ cup"],["Tomatoes, chopped","2"],["Ginger-garlic paste","2 tbsp"],["Biryani masala","2 tbsp, to taste"],["Fresh coriander and mint","½ cup"],["Oil or ghee","⅓ cup"]],["Rinse rice and parboil in salted water until about 70% cooked; drain.","Brown sliced onions in oil. Add chicken, ginger-garlic paste and biryani masala; cook until sealed.","Stir in tomatoes and yogurt; simmer until chicken is cooked and the masala thickens. Add herbs.","Layer rice over the chicken, cover tightly and steam on low heat for 15–20 minutes. Fluff gently before serving."]],
+      ["chicken-karahi","Chicken Karahi","Chicken","Pakistani","indian",[["Chicken, bone-in pieces","800 g"],["Tomatoes, chopped","4"],["Ginger, julienned","2 tbsp"],["Garlic, minced","1 tbsp"],["Green chillies","2–3"],["Crushed coriander","1 tsp"],["Crushed cumin","1 tsp"],["Oil","¼ cup"],["Fresh coriander","to garnish"]],["Heat oil in a karahi or deep pan and brown the chicken for several minutes.","Add garlic, crushed coriander, cumin and tomatoes. Cook uncovered, stirring, until tomatoes break down.","Add a splash of water if needed, cover and simmer until the chicken is fully cooked and tender.","Reduce the sauce until glossy. Finish with green chillies, ginger and fresh coriander; serve hot."]],
+      ["butter-chicken","Butter Chicken","Chicken","Indian","indian",[["Boneless chicken","700 g"],["Yogurt","½ cup"],["Garam masala","2 tsp"],["Tomato puree","1½ cups"],["Butter","3 tbsp"],["Cream","½ cup"],["Ginger-garlic paste","1 tbsp"],["Kashmiri chilli or paprika","1 tsp"]],["Marinate chicken in yogurt, half the garam masala and a little salt for 20 minutes.","Sear or grill chicken in a hot pan until lightly browned and cooked through; set aside.","Melt butter, cook ginger-garlic paste, then add tomato puree, chilli and remaining garam masala. Simmer 10 minutes.","Stir in cream and chicken; simmer gently for 5 minutes. Serve with rice or naan."]],
+      ["chicken-tikka","Chicken Tikka","Chicken","Indian","chicken",[["Boneless chicken chunks","700 g"],["Yogurt","¾ cup"],["Lemon juice","2 tbsp"],["Ginger-garlic paste","1 tbsp"],["Paprika","1 tsp"],["Garam masala","1 tsp"],["Ground cumin","1 tsp"],["Oil","1 tbsp"]],["Mix yogurt, lemon, ginger-garlic, spices and oil into a marinade.","Coat chicken pieces and refrigerate for at least 30 minutes.","Thread onto skewers or spread on a lined tray. Grill or bake at 220°C (425°F), turning once, until cooked through and lightly charred.","Check the thickest piece reaches 74°C (165°F). Rest briefly and serve with lemon and chutney."]],
+      ["chicken-alfredo","Creamy Chicken Alfredo","Pasta","Italian","pasta",[["Fettuccine","300 g"],["Chicken breast","2"],["Butter","3 tbsp"],["Garlic, minced","3 cloves"],["Heavy cream","1 cup"],["Parmesan, grated","¾ cup"],["Black pepper","to taste"]],["Cook pasta in salted water; reserve a cup of pasta water before draining.","Season chicken, sear in a pan until cooked through, then slice.","Melt butter, gently cook garlic, add cream and simmer for 2–3 minutes. Stir in Parmesan.","Toss pasta and chicken through the sauce, loosening with pasta water if needed. Finish with black pepper."]],
+      ["chicken-shawarma","Chicken Shawarma Wraps","Chicken","Middle Eastern","chicken",[["Boneless chicken thighs","700 g"],["Yogurt","¼ cup"],["Lemon juice","2 tbsp"],["Ground cumin","1 tsp"],["Paprika","1 tsp"],["Garlic","3 cloves"],["Flatbreads","4"],["Cucumber and tomato","to serve"]],["Mix yogurt, lemon, garlic, cumin, paprika, salt and pepper. Coat chicken and marinate for 30 minutes or longer.","Roast or pan-cook chicken at high heat until browned and cooked through; slice thinly.","Warm the flatbreads and prepare cucumber, tomato and any garlic sauce.","Fill flatbreads with chicken and vegetables, drizzle with sauce, roll and serve."]],
+      ["teriyaki-chicken","Teriyaki Chicken","Chicken","Japanese","asian",[["Chicken thighs","600 g"],["Soy sauce","¼ cup"],["Mirin or rice vinegar","2 tbsp"],["Honey or brown sugar","2 tbsp"],["Garlic","2 cloves"],["Fresh ginger","1 tsp"],["Cornflour","1 tsp, optional"]],["Mix soy sauce, mirin or vinegar, honey, garlic and ginger in a small bowl.","Sear chicken in a skillet until golden and nearly cooked through.","Pour in the sauce and simmer, turning the chicken, until glossy and cooked through. Thicken with a little cornflour slurry if needed.","Slice and serve over rice with spring onions and sesame seeds."]],
+      ["spaghetti-bolognese","Spaghetti Bolognese","Pasta","Italian","pasta",[["Spaghetti","300 g"],["Ground beef","500 g"],["Onion, diced","1"],["Carrot, diced","1"],["Garlic","2 cloves"],["Chopped tomatoes","1 can, 400 g"],["Tomato paste","2 tbsp"],["Dried oregano","1 tsp"]],["Cook spaghetti in salted water until al dente; reserve a little pasta water.","Brown beef in a saucepan, then add onion, carrot and garlic and cook until softened.","Stir in tomato paste, canned tomatoes, oregano, salt and pepper. Simmer 20–30 minutes.","Toss sauce with spaghetti, adding a splash of pasta water if needed. Serve with Parmesan."]],
+      ["lasagna","Classic Beef Lasagna","Pasta","Italian","pasta",[["Lasagna sheets","9–12"],["Ground beef","500 g"],["Chopped tomatoes","1 can, 400 g"],["Onion","1"],["Garlic","2 cloves"],["Milk","2 cups"],["Butter","3 tbsp"],["Flour","3 tbsp"],["Mozzarella","1 cup"],["Parmesan","½ cup"]],["Cook onion, garlic and beef until browned; add tomatoes and simmer for 15 minutes.","For white sauce, melt butter, stir in flour, then gradually whisk in milk until thick. Season.","Layer meat sauce, lasagna sheets and white sauce in a baking dish; repeat and top with cheeses.","Bake at 180°C (350°F) for 35–45 minutes until bubbling and golden. Rest 10 minutes before slicing."]],
+      ["margherita-pizza","Margherita Pizza","Miscellaneous","Italian","pizza",[["Pizza dough","1 ball"],["Tomato passata","½ cup"],["Fresh mozzarella","200 g"],["Fresh basil","1 handful"],["Olive oil","1 tbsp"],["Salt","to taste"]],["Heat oven as high as it safely goes, ideally 240°C (465°F), with a tray or stone inside.","Stretch the dough thinly and spread with a light layer of passata; season with salt.","Add torn mozzarella and a drizzle of olive oil.","Bake 7–12 minutes until the crust is puffed and browned. Scatter basil over the top before serving."]],
+      ["mac-and-cheese","Creamy Mac and Cheese","Pasta","American","pasta",[["Macaroni","300 g"],["Butter","3 tbsp"],["Flour","3 tbsp"],["Milk","2½ cups"],["Cheddar, grated","2 cups"],["Mustard powder","½ tsp, optional"],["Breadcrumbs","½ cup, optional"]],["Boil macaroni until just al dente; drain.","Melt butter in a saucepan, whisk in flour and cook for one minute. Gradually whisk in milk until thickened.","Turn off the heat and stir in cheddar and mustard. Season, then fold in macaroni.","Serve creamy, or top with breadcrumbs and bake at 200°C (400°F) for 15 minutes until golden."]],
+      ["pesto-pasta","Basil Pesto Pasta","Pasta","Italian","pasta",[["Pasta","300 g"],["Basil leaves","2 cups"],["Parmesan","½ cup"],["Pine nuts or walnuts","¼ cup"],["Garlic","1 clove"],["Olive oil","⅓ cup"],["Lemon juice","1 tsp"]],["Cook pasta in salted water and reserve a mug of cooking water.","Blend basil, Parmesan, nuts, garlic, lemon and olive oil into a coarse pesto.","Toss hot pasta with pesto and a splash of pasta water until glossy.","Season to taste and serve with extra Parmesan and basil."]],
+      ["beef-burger","Classic Beef Burgers","Beef","American","burger",[["Ground beef","500 g"],["Burger buns","4"],["Cheddar slices","4"],["Salt and black pepper","to taste"],["Lettuce","4 leaves"],["Tomato","1, sliced"],["Onion","½, sliced"]],["Divide beef into four patties slightly wider than the buns; season the outside with salt and pepper.","Cook in a hot skillet or grill until browned and cooked to your preferred doneness; add cheese near the end.","Toast the buns cut-side down.","Build burgers with lettuce, tomato, onion and your favourite sauce. Keep raw-meat utensils separate from ready-to-eat food."]],
+      ["beef-tacos","Beef Tacos","Beef","Mexican","mexican",[["Ground beef","500 g"],["Taco shells or tortillas","8"],["Onion, diced","1"],["Taco seasoning","2 tbsp"],["Lettuce, shredded","1 cup"],["Tomato, diced","1"],["Cheddar, grated","½ cup"],["Salsa","to serve"]],["Cook onion in a skillet until soft, then add ground beef and brown it thoroughly.","Stir in taco seasoning and a splash of water; simmer until the meat is coated and cooked through.","Warm the taco shells or tortillas.","Fill with beef, lettuce, tomato, cheese and salsa. Add lime or yogurt if desired."]],
+      ["chicken-fajitas","Chicken Fajitas","Chicken","Mexican","mexican",[["Chicken breast, strips","600 g"],["Bell peppers, sliced","3"],["Onion, sliced","1"],["Paprika","1 tsp"],["Ground cumin","1 tsp"],["Lime juice","2 tbsp"],["Tortillas","8"],["Oil","1 tbsp"]],["Toss chicken with paprika, cumin, lime juice, oil, salt and pepper.","Sear chicken in a hot pan until browned and cooked through; transfer to a clean plate.","Cook peppers and onion in the same pan until tender with a little char, then return chicken to the pan.","Serve sizzling in warm tortillas with salsa, yogurt or guacamole."]],
+      ["chicken-fried-rice","Chicken Fried Rice","Chicken","Chinese","rice",[["Cooked cold rice","3 cups"],["Chicken breast, diced","300 g"],["Eggs","2"],["Mixed vegetables","1 cup"],["Soy sauce","2 tbsp"],["Garlic","2 cloves"],["Sesame or neutral oil","2 tbsp"],["Spring onions","to garnish"]],["Use cold cooked rice; separate any clumps with a fork.","Cook chicken in a hot wok or skillet until fully cooked, then move it to one side and scramble the eggs.","Add garlic and vegetables; stir-fry until tender. Add rice and toss over high heat.","Stir in soy sauce and chicken; heat everything through and garnish with spring onions."]],
+      ["vegetable-fried-rice","Vegetable Fried Rice","Vegan","Chinese","rice",[["Cooked cold rice","3 cups"],["Mixed vegetables","1½ cups"],["Spring onions","3"],["Soy sauce","2 tbsp"],["Garlic","2 cloves"],["Sesame oil","1 tsp"],["Neutral oil","1 tbsp"]],["Heat neutral oil in a wok or large skillet until hot.","Add garlic and vegetables; stir-fry for 3–5 minutes until just tender.","Add cold rice and break apart clumps while tossing over high heat.","Season with soy sauce and sesame oil, fold through spring onions and serve hot."]],
+      ["vegetable-stir-fry","Quick Vegetable Stir-Fry","Vegan","Chinese","vegetable",[["Broccoli florets","2 cups"],["Bell pepper, sliced","1"],["Carrot, sliced","1"],["Snow peas","1 cup"],["Garlic","2 cloves"],["Soy sauce","2 tbsp"],["Ginger, grated","1 tsp"],["Cornflour","1 tsp"],["Water","¼ cup"]],["Whisk soy sauce, water and cornflour together for a quick sauce.","Heat oil in a wok. Stir-fry carrot and broccoli for 3 minutes, adding a splash of water if needed.","Add pepper, snow peas, garlic and ginger; cook until crisp-tender.","Pour in sauce and toss until glossy. Serve with rice or noodles."]],
+      ["chicken-noodle-soup","Chicken Noodle Soup","Chicken","American","soup",[["Cooked chicken, shredded","2 cups"],["Egg noodles","150 g"],["Chicken stock","6 cups"],["Carrot, sliced","2"],["Celery, sliced","2 stalks"],["Onion, diced","1"],["Garlic","2 cloves"],["Thyme","½ tsp"]],["Soften onion, carrot and celery in a large pot with a little oil.","Add garlic, thyme and chicken stock; bring to a gentle simmer until vegetables are tender.","Add noodles and cook according to their packet instructions.","Stir in shredded cooked chicken and heat through. Season and serve warm."]],
+      ["tomato-basil-soup","Tomato Basil Soup","Vegan","Italian","soup",[["Ripe tomatoes or canned tomatoes","800 g"],["Onion, chopped","1"],["Garlic","3 cloves"],["Vegetable stock","2 cups"],["Fresh basil","1 handful"],["Olive oil","1 tbsp"],["Sugar","½ tsp, optional"]],["Soften onion in olive oil, then add garlic and cook for 30 seconds.","Add tomatoes and stock; simmer for 20 minutes.","Blend until smooth, adding a little water if needed.","Stir in chopped basil, season to taste and serve. Add cream only if you do not need a vegan version."]],
+      ["greek-salad","Greek Salad","Vegetarian","Greek","salad",[["Cucumber","1"],["Tomatoes","3"],["Red onion","½"],["Feta cheese","150 g"],["Kalamata olives","½ cup"],["Olive oil","3 tbsp"],["Red wine vinegar or lemon","1 tbsp"],["Dried oregano","1 tsp"]],["Cut cucumber and tomatoes into bite-sized pieces and thinly slice the onion.","Arrange vegetables with olives in a serving bowl.","Whisk olive oil, vinegar or lemon, oregano, salt and pepper.","Pour dressing over the salad, add feta and serve fresh."]],
+      ["hummus","Creamy Hummus","Vegan","Middle Eastern","vegetable",[["Cooked chickpeas, drained","1 can, 400 g"],["Tahini","3 tbsp"],["Lemon juice","2 tbsp"],["Garlic","1 clove"],["Olive oil","2 tbsp"],["Ground cumin","½ tsp"],["Cold water","2–4 tbsp"]],["Rinse and drain chickpeas. For extra-smooth hummus, remove loose skins if you have time.","Blend chickpeas, tahini, lemon juice, garlic, cumin and olive oil.","Add cold water a spoonful at a time until creamy; season with salt.","Spoon into a bowl, swirl the top and finish with olive oil and paprika. Serve with pita or vegetables."]],
+      ["guacamole","Fresh Guacamole","Vegan","Mexican","vegetable",[["Ripe avocados","2"],["Lime juice","1 tbsp"],["Tomato, finely diced","1"],["Red onion, finely diced","2 tbsp"],["Coriander leaves","2 tbsp"],["Salt","to taste"],["Jalapeno","optional"]],["Halve avocados, remove pits and scoop the flesh into a bowl.","Mash with lime juice and salt, keeping a little texture.","Fold through tomato, onion, coriander and jalapeno if using.","Taste and adjust lime and salt. Serve immediately with tortilla chips or tacos."]],
+      ["fish-and-chips","Fish and Chips","Seafood","British","seafood",[["White fish fillets","4"],["Potatoes","4 large"],["All-purpose flour","1 cup"],["Cold sparkling water","1 cup"],["Baking powder","1 tsp"],["Oil for frying","as needed"],["Salt","to taste"]],["Cut potatoes into chips, rinse and dry thoroughly. Bake or fry until crisp and golden.","Pat fish dry and season lightly. Mix flour and baking powder, then whisk in cold sparkling water to make batter.","Dip fish in a little flour, then batter. Fry carefully in hot oil until crisp and the fish flakes easily.","Drain on a rack, season and serve with chips, lemon and peas. Take care around hot oil."]],
+      ["grilled-salmon","Lemon Garlic Salmon","Seafood","American","seafood",[["Salmon fillets","4"],["Olive oil","1 tbsp"],["Lemon","1"],["Garlic, minced","2 cloves"],["Dried dill or parsley","1 tsp"],["Salt and black pepper","to taste"]],["Heat oven to 200°C (400°F) or prepare a grill.","Place salmon on a lined tray. Mix oil, garlic, lemon zest and herbs, then brush over the fish.","Bake 12–15 minutes depending on thickness, until the salmon flakes and reaches a safe internal temperature.","Finish with lemon juice and serve with vegetables or rice."]],
+      ["garlic-butter-shrimp","Garlic Butter Shrimp","Seafood","American","seafood",[["Peeled shrimp","500 g"],["Butter","3 tbsp"],["Garlic, minced","4 cloves"],["Lemon juice","1 tbsp"],["Chilli flakes","optional"],["Parsley, chopped","2 tbsp"]],["Pat shrimp dry and season lightly with salt and pepper.","Melt butter in a skillet; add garlic and optional chilli flakes and cook briefly until fragrant.","Add shrimp in a single layer and cook 1–2 minutes per side, until pink and opaque.","Stir through lemon juice and parsley. Serve at once with rice, pasta or crusty bread."]],
+      ["daal-tadka","Daal Tadka","Vegan","Indian","indian",[["Red lentils or yellow dal","1 cup"],["Water","3 cups"],["Onion, chopped","1"],["Tomato, chopped","1"],["Garlic","3 cloves"],["Cumin seeds","1 tsp"],["Turmeric","½ tsp"],["Oil or ghee","2 tbsp"],["Fresh coriander","to garnish"]],["Rinse lentils and simmer with water and turmeric until soft, about 20 minutes; add water if needed.","In a small pan, heat oil or ghee. Add cumin seeds, then onion and cook until golden.","Add garlic and tomato; cook until the tomato softens, then pour the tempering into the lentils.","Season, adjust thickness with hot water and garnish with coriander. Serve with rice or roti."]],
+      ["chana-masala","Chana Masala","Vegan","Indian","indian",[["Cooked chickpeas","2 cans, drained"],["Onion, diced","1 large"],["Tomatoes, chopped","2"],["Garlic-ginger paste","1 tbsp"],["Ground cumin","1 tsp"],["Ground coriander","1 tsp"],["Garam masala","1 tsp"],["Oil","2 tbsp"],["Fresh coriander","to garnish"]],["Heat oil and cook onion until golden, then add garlic-ginger paste.","Stir in cumin, coriander and garam masala, then add tomatoes and cook until thick.","Add chickpeas and about ½ cup water. Simmer 15–20 minutes, gently mashing a few chickpeas to thicken.","Finish with coriander and a squeeze of lemon. Serve with rice, roti or naan."]],
+      ["aloo-gobi","Aloo Gobi","Vegan","Indian","indian",[["Potatoes, cubed","3 medium"],["Cauliflower florets","1 small head"],["Onion, chopped","1"],["Tomato, chopped","1"],["Ginger, grated","1 tbsp"],["Turmeric","½ tsp"],["Ground cumin","1 tsp"],["Oil","2 tbsp"]],["Heat oil in a wide pan and soften onion; add ginger and spices.","Add potatoes and cauliflower and toss until coated in spices.","Add tomato and a splash of water, cover and cook on low, stirring occasionally, until vegetables are tender.","Season to taste and garnish with coriander. Serve with roti or rice."]],
+      ["palak-paneer","Palak Paneer","Vegetarian","Indian","indian",[["Spinach","500 g"],["Paneer cubes","250 g"],["Onion, chopped","1"],["Tomato, chopped","1"],["Garlic","3 cloves"],["Garam masala","1 tsp"],["Cream","2 tbsp, optional"],["Oil","2 tbsp"]],["Blanch spinach for 1–2 minutes, cool quickly, then blend into a puree.","Lightly brown paneer cubes in a little oil and set aside.","Cook onion and garlic until soft; add tomato and garam masala and simmer until thick.","Stir in spinach puree and paneer; simmer gently for 5 minutes. Finish with cream if desired."]],
+      ["paneer-butter-masala","Paneer Butter Masala","Vegetarian","Indian","indian",[["Paneer cubes","300 g"],["Tomato puree","1½ cups"],["Butter","2 tbsp"],["Cream","⅓ cup"],["Ginger-garlic paste","1 tbsp"],["Garam masala","1 tsp"],["Kashmiri chilli or paprika","½ tsp"],["Cashews","10, optional"]],["Optional: soak cashews in hot water for 10 minutes and blend with a little water.","Melt butter; cook ginger-garlic paste, then add tomato puree, chilli and garam masala. Simmer 10 minutes.","Stir in cashew paste if using, then cream and paneer cubes.","Simmer gently for 5–7 minutes without breaking the paneer. Serve with naan or rice."]],
+      ["vegetable-samosas","Easy Vegetable Samosas","Vegetarian","Indian","indian",[["Potatoes, boiled and mashed","2 cups"],["Green peas","½ cup"],["Samosa pastry sheets","8"],["Cumin seeds","1 tsp"],["Garam masala","½ tsp"],["Fresh coriander","2 tbsp"],["Oil","for brushing or frying"]],["Cook cumin briefly in a little oil, add peas, potatoes, garam masala, salt and coriander; cool the filling.","Fold each pastry sheet into a cone, add filling and seal the edge with a flour-water paste.","Brush with oil and bake at 200°C (400°F) until crisp, or fry carefully until golden.","Let cool slightly and serve with mint chutney or tamarind sauce."]],
+      ["gulab-jamun","Gulab Jamun","Dessert","Indian","indian",[["Milk powder","1 cup"],["All-purpose flour","¼ cup"],["Baking powder","¼ tsp"],["Ghee or butter","1 tbsp"],["Milk","as needed"],["Sugar","1½ cups"],["Water","1½ cups"],["Cardamom","3 pods"],["Oil or ghee for frying","as needed"]],["Simmer sugar, water and cardamom for 5–7 minutes to make a light syrup; keep warm, not boiling.","Mix milk powder, flour, baking powder and ghee. Add milk a little at a time to form a soft dough; do not overwork it.","Shape into small smooth balls with no cracks. Fry on low-medium heat, turning gently, until evenly deep golden.","Drain briefly and place in warm syrup for at least 1 hour before serving."]],
+      ["rice-kheer","Rice Kheer","Dessert","Indian","indian",[["Rice","¼ cup"],["Whole milk","1 litre"],["Sugar","⅓ cup, to taste"],["Cardamom","3 pods"],["Almonds or pistachios","2 tbsp, chopped"],["Raisins","1 tbsp, optional"]],["Rinse rice and soak for 15 minutes, then drain.","Bring milk to a gentle simmer in a heavy pot. Add rice and cardamom.","Cook on low, stirring often, until rice is very soft and the milk has thickened, about 35–45 minutes.","Stir in sugar and cook 5 minutes more. Garnish with nuts and serve warm or chilled."]],
+      ["mango-lassi","Mango Lassi","Miscellaneous","Indian","drink",[["Ripe mango flesh","1½ cups"],["Plain yogurt","1 cup"],["Cold milk","½ cup"],["Honey or sugar","1–2 tbsp, optional"],["Cardamom","a pinch, optional"],["Ice","a handful"]],["Add mango, yogurt, milk, sweetener and ice to a blender.","Blend until silky smooth, adding a little more milk if you prefer a thinner drink.","Taste and adjust sweetness or cardamom.","Pour into chilled glasses and serve straight away."]],
+      ["lamb-curry","Slow-Simmered Lamb Curry","Lamb","Indian","indian",[["Lamb shoulder, cubed","700 g"],["Onions, sliced","2"],["Tomatoes, chopped","2"],["Yogurt","½ cup"],["Ginger-garlic paste","1 tbsp"],["Curry powder or garam masala","2 tbsp"],["Oil","3 tbsp"],["Water or stock","1½ cups"]],["Brown lamb pieces in hot oil in batches, then set aside.","Cook onions until golden; add ginger-garlic paste and spices and stir for one minute.","Add tomatoes, yogurt and lamb. Pour in stock, cover and simmer gently until lamb is tender, about 1–1½ hours.","Uncover to reduce the sauce if necessary. Season and serve with rice or naan."]],
+      ["garlic-naan","Garlic Naan","Side","Indian","bread",[["All-purpose flour","3 cups"],["Plain yogurt","½ cup"],["Warm water","½ cup, as needed"],["Instant yeast","1 tsp"],["Sugar","1 tsp"],["Salt","1 tsp"],["Garlic, minced","3 cloves"],["Butter","3 tbsp"]],["Mix flour, yeast, sugar, salt and yogurt; add warm water gradually to form a soft dough. Knead and rest, covered, for 1 hour.","Divide into balls and roll into oval flatbreads.","Cook each on a very hot skillet until bubbles form, flip and cook the other side until browned.","Brush with melted butter mixed with garlic and chopped coriander. Serve warm."]],
+      ["chicken-quesadillas","Chicken Quesadillas","Chicken","Mexican","mexican",[["Cooked chicken, shredded","2 cups"],["Tortillas","4 large"],["Cheddar or Monterey Jack","1½ cups"],["Bell pepper, sliced","1"],["Onion, sliced","½"],["Paprika","½ tsp"],["Oil","1 tbsp"]],["Cook pepper and onion in a skillet until softened; season with paprika.","Add shredded chicken and warm through.","Scatter cheese and chicken mixture over half of each tortilla; fold over.","Toast in a lightly oiled pan for 2–3 minutes per side until crisp and cheese melts. Cut into wedges."]],
+      ["ratatouille","Rustic Ratatouille","Vegan","French","vegetable",[["Eggplant, cubed","1 small"],["Zucchini, sliced","2"],["Bell pepper, chopped","1"],["Tomatoes, chopped","3"],["Onion, chopped","1"],["Garlic","3 cloves"],["Olive oil","3 tbsp"],["Thyme","1 tsp"]],["Heat oven to 190°C (375°F), or prepare a large covered skillet.","Toss or lightly brown eggplant, zucchini, pepper and onion in olive oil in batches.","Add garlic, tomatoes, thyme, salt and pepper. Transfer to a baking dish or cover the skillet and cook until vegetables are tender.","Bake 35–45 minutes if using the oven, then finish with fresh herbs and good olive oil."]],
+      ["lentil-soup","Hearty Lentil Soup","Vegan","Mediterranean","soup",[["Brown or green lentils, rinsed","1 cup"],["Carrot, diced","1"],["Celery, diced","1 stalk"],["Onion, diced","1"],["Garlic","2 cloves"],["Vegetable stock","5 cups"],["Cumin","1 tsp"],["Chopped tomatoes","1 cup"]],["Soften onion, carrot and celery in a large pot with a little oil.","Add garlic, cumin, lentils, tomatoes and stock; bring to a boil.","Lower heat and simmer 25–35 minutes until lentils are tender, adding water if needed.","Season with salt, pepper and lemon juice. Blend part of the soup for a thicker texture if desired."]],
+      ["garlic-bread","Cheesy Garlic Bread","Side","Italian","bread",[["Baguette","1"],["Butter, softened","½ cup"],["Garlic, minced","4 cloves"],["Parsley, chopped","2 tbsp"],["Mozzarella, grated","1 cup, optional"]],["Heat oven to 200°C (400°F) and slice the baguette lengthwise.","Mix softened butter with garlic, parsley, salt and pepper.","Spread over bread and add mozzarella if using.","Bake 8–12 minutes until crisp at the edges and the cheese is melted. Slice and serve warm."]],
+      ["baked-potato","Crispy Baked Potatoes","Side","British","vegetable",[["Large baking potatoes","4"],["Olive oil","1 tbsp"],["Salt","to taste"],["Sour cream or yogurt","to serve"],["Chives","to serve"]],["Heat oven to 200°C (400°F). Scrub potatoes and dry them well.","Prick each potato several times, rub with oil and salt, and place directly on a tray.","Bake 50–70 minutes, depending on size, until the skins are crisp and centres are soft.","Split open and fluff the inside with a fork. Add sour cream or yogurt and chives."]],
+      ["stuffed-peppers","Stuffed Bell Peppers","Vegetarian","Mediterranean","vegetable",[["Bell peppers","4"],["Cooked rice","1½ cups"],["Black beans or cooked lentils","1 cup"],["Chopped tomatoes","1 cup"],["Cheddar or mozzarella","¾ cup"],["Onion, diced","1 small"],["Paprika","1 tsp"]],["Heat oven to 190°C (375°F). Slice tops off peppers and remove seeds.","Mix rice, beans or lentils, tomatoes, onion, paprika and half the cheese.","Fill peppers and place upright in a baking dish with a splash of water at the bottom.","Cover and bake 30 minutes, then uncover, add remaining cheese and bake 10–15 minutes more."]],
+      ["bruschetta","Tomato Bruschetta","Starter","Italian","bread",[["Baguette","1"],["Ripe tomatoes, diced","3"],["Garlic","2 cloves"],["Fresh basil","¼ cup"],["Olive oil","2 tbsp"],["Balsamic vinegar","1 tsp, optional"]],["Mix tomatoes with chopped basil, olive oil, a little minced garlic, salt and pepper.","Slice baguette and toast or grill until crisp on both sides.","Rub the warm bread with a cut garlic clove.","Spoon tomato mixture over the bread just before serving so it stays crisp."]],
+      ["caprese-salad","Caprese Salad","Vegetarian","Italian","salad",[["Ripe tomatoes","3"],["Fresh mozzarella","250 g"],["Fresh basil leaves","1 handful"],["Extra virgin olive oil","2 tbsp"],["Balsamic glaze","optional"],["Salt and black pepper","to taste"]],["Slice tomatoes and mozzarella into rounds.","Arrange alternating slices on a platter with basil leaves.","Drizzle with olive oil and season with salt and black pepper.","Add a little balsamic glaze if desired and serve fresh."]],
+      ["ramen","Easy Chicken Ramen","Chicken","Japanese","asian",[["Ramen noodles","2 portions"],["Chicken stock","4 cups"],["Cooked chicken, sliced","2 cups"],["Soy sauce","2 tbsp"],["Mushrooms, sliced","1 cup"],["Spinach","2 handfuls"],["Eggs","2, optional"],["Spring onions","to garnish"]],["Warm stock with soy sauce and mushrooms; simmer until the mushrooms soften.","Cook ramen noodles separately according to their packet instructions and drain.","Add spinach to the broth until wilted, then divide noodles between bowls and pour over the broth.","Top with sliced cooked chicken, a soft-boiled egg if using, and spring onions."]],
+      ["thai-green-curry","Thai Green Vegetable Curry","Vegan","Thai","asian",[["Green curry paste","2–3 tbsp"],["Coconut milk","1 can, 400 ml"],["Broccoli","1 cup"],["Bell pepper","1"],["Carrot, sliced","1"],["Firm tofu","250 g, optional"],["Soy sauce","1 tbsp"],["Thai basil","to garnish"]],["Warm a spoonful of coconut cream in a pan and fry the curry paste for 1 minute.","Add remaining coconut milk and bring to a gentle simmer.","Add vegetables and tofu if using; cook until tender but still colourful.","Season with soy sauce and lime juice. Garnish with Thai basil and serve with rice. Check curry paste ingredients for fish sauce if keeping the meal vegan."]],
+      ["pad-thai","Quick Vegetable Pad Thai","Vegan","Thai","asian",[["Rice noodles","200 g"],["Firm tofu, cubed","200 g"],["Bean sprouts","1 cup"],["Spring onions","3"],["Tamarind paste","1 tbsp"],["Soy sauce","2 tbsp"],["Brown sugar","1 tbsp"],["Lime","1"],["Crushed peanuts","to garnish"]],["Soak or cook rice noodles as directed, then drain.","Mix tamarind, soy sauce, brown sugar and a splash of water to make the sauce.","Sear tofu in a hot wok, add noodles and sauce, and toss until coated and hot.","Fold in bean sprouts and spring onions. Finish with lime and crushed peanuts."]]
+    ];
+
+    function makeLocalRecipe([slug, name, category, area, imageStyle, ingredients, steps]) {
+      const meal = {
+        idMeal: `local-${slug}`, strMeal: name, strCategory: category, strArea: area,
+        strMealThumb: LOCAL_FOOD_IMAGES[imageStyle] || LOCAL_FOOD_IMAGES.dessert,
+        strYoutube: "", strSource: "",
+        strInstructions: steps.join("\n")
+      };
+      ingredients.slice(0, 20).forEach(([ingredient, measure], index) => {
+        meal[`strIngredient${index + 1}`] = ingredient;
+        meal[`strMeasure${index + 1}`] = measure;
+      });
+      return meal;
+    }
+    const LOCAL_RECIPES = LOCAL_RECIPE_DATA.map(makeLocalRecipe);
+    const LOCAL_RECIPE_BY_ID = new Map(LOCAL_RECIPES.map(meal => [String(meal.idMeal), meal]));
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
+    }
+    function safeImageURL(value) {
+      try { const url = new URL(value); return url.protocol === "https:" ? url.href : ROAST_IMAGE; }
+      catch { return ROAST_IMAGE; }
+    }
+    function setStatus(message = "", type = "") {
+      statusBox.textContent = message;
+      statusBox.className = "status" + (message ? " show" : "") + (type ? " " + type : "");
+    }
+    function setLoading(isLoading) {
+      searchButton.disabled = isLoading;
+      searchButton.innerHTML = isLoading ? 'Finding… <span aria-hidden="true">◌</span>' : 'Find recipe <span aria-hidden="true">↗</span>';
+      if (isLoading) {
+        recipeMain.innerHTML = `<div class="loading"><div class="skeleton-row"><div class="skeleton skeleton-image"></div><div class="skeleton-lines"><div class="skeleton skeleton-line large"></div><div class="skeleton skeleton-line medium"></div><div class="skeleton skeleton-line small"></div></div></div><div class="skeleton skeleton-line" style="margin-top:30px;width:96%;height:12px"></div><div class="skeleton skeleton-line" style="margin-top:12px;width:84%;height:12px"></div><div class="skeleton skeleton-line" style="margin-top:12px;width:91%;height:12px"></div></div>`;
+      }
+    }
+    function collectIngredients(meal) {
+      const result = [];
+      for (let i = 1; i <= 20; i++) {
+        const ingredient = String(meal[`strIngredient${i}`] || "").trim();
+        const measure = String(meal[`strMeasure${i}`] || "").trim();
+        if (ingredient) result.push({ ingredient, measure });
+      }
+      return result;
+    }
+    function splitInstructions(text) {
+      const clean = String(text || "").replace(/\r/g, "\n").trim();
+      if (!clean) return [];
+      let parts = clean.split(/\n+/).map(s => s.trim()).filter(Boolean);
+      if (parts.length <= 1) parts = clean.split(/(?<=[.!?])\s+(?=[A-Z0-9])/).map(s => s.trim()).filter(Boolean);
+      return parts;
+    }
+    function getYoutubeId(urlString) {
+      if (!urlString) return "";
+      try {
+        const url = new URL(urlString);
+        let id = "";
+        if (url.hostname.includes("youtu.be")) id = url.pathname.split("/").filter(Boolean)[0] || "";
+        else if (url.searchParams.get("v")) id = url.searchParams.get("v");
+        else {
+          const parts = url.pathname.split("/").filter(Boolean);
+          const marker = parts.findIndex(part => ["embed", "shorts", "live"].includes(part));
+          if (marker >= 0) id = parts[marker + 1] || "";
+        }
+        return /^[A-Za-z0-9_-]{11}$/.test(id) ? id : "";
+      } catch { return ""; }
+    }
+    // Direct videos from TheMealDB are preferred. For common built-in recipes,
+    // curated YouTube tutorial IDs keep playback embedded on this page.
+    const CURATED_VIDEO_GUIDES = [
+      { pattern: /cheesecake/, id: "W79h6GmSr8U", title: "Cheesecake technique" },
+      { pattern: /chocolate chip cookies?|oatmeal raisin cookies?|cookies?/, id: "00hLM-CftNg", title: "Cookie baking guide" },
+      { pattern: /chocolate.*cake|red velvet cake|vanilla sponge cake|carrot cake|cupcakes?|brownies?|muffins?|tiramisu|chocolate mousse|apple crumble|pumpkin pie|strawberry shortcake/, id: "6MEl7RHgTiQ", title: "Cake and dessert baking guide" },
+      { pattern: /biryani|pulao/, id: "GZm7cmKK1bk", title: "Chicken biryani cooking guide" },
+      { pattern: /butter chicken|chicken tikka masala|chicken karahi|chicken curry|tikka masala/, id: "8V6Krk8DDuc", title: "Butter chicken cooking guide" },
+      { pattern: /pancakes?|waffles?|crepes?|french toast/, id: "LWuuCndtJr0", title: "Pancake breakfast guide" },
+      { pattern: /pizza/, id: "ivenBExVhsk", title: "Homemade pizza guide" },
+      { pattern: /pasta|spaghetti|alfredo|bolognese|mac and cheese|lasagna|lasagne/, id: "hsritkP8q8Q", title: "Creamy pasta cooking guide" },
+      { pattern: /bread|cinnamon rolls?|naan|dough/, id: "Kww5SCPbl-E", title: "Homemade bread guide" },
+      { pattern: /ramen|noodles?/, id: "9gNIqtmYg5o", title: "Ramen noodle guide" },
+      { pattern: /roast chicken|chicken roast/, id: "6-HUJyBzw70", title: "Roast chicken guide" },
+    ];
+    function curatedVideoFor(meal) {
+      const title = normalise(meal.strMeal || "");
+      const guide = CURATED_VIDEO_GUIDES.find(item => item.pattern.test(title));
+      if (guide) return { id: guide.id, title: guide.title, isRelated: !/^(chocolate fudge cake|vanilla sponge cake|red velvet cake|chocolate chip cookies|chicken biryani|butter chicken|pancakes|homemade pizza|roast chicken)$/i.test(String(meal.strMeal || "").trim()) };
+      // When a dish does not have its own video, choose a relevant broad tutorial only for its matching course.
+      const category = normalise(meal.strCategory || "");
+      const fallbackByCategory = {
+        "dessert": { id: "6MEl7RHgTiQ", title: "Baking technique video" },
+        "breakfast": { id: "LWuuCndtJr0", title: "Breakfast cooking video" },
+        "pasta": { id: "hsritkP8q8Q", title: "Pasta cooking video" },
+        "chicken": { id: "6-HUJyBzw70", title: "Chicken roasting guide" },
+        "rice": { id: "GZm7cmKK1bk", title: "Rice and biryani cooking guide" }
+      };
+      return fallbackByCategory[category] ? { ...fallbackByCategory[category], isRelated: true } : null;
+    }
+    function buildVideoHTML(meal) {
+      const directID = getYoutubeId(meal.strYoutube);
+      const curated = directID ? null : curatedVideoFor(meal);
+      const videoID = directID || curated?.id;
+      if (videoID) {
+        const description = curated?.title || `Video tutorial for ${meal.strMeal || "this recipe"}`;
+        const note = curated?.isRelated
+          ? `<div class="video-caption">Related in-page guide: ${escapeHTML(description)}. This recipe’s own exact video was not supplied.</div>`
+          : `<div class="video-caption">Playing inside Savour · ${escapeHTML(description)}</div>`;
+        return `<div class="video-player-wrap"><iframe src="https://www.youtube-nocookie.com/embed/${videoID}?rel=0&modestbranding=1" title="${escapeHTML(description)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>${note}`;
+      }
+      return `<div class="video-fallback"><div class="video-note-icon">▶</div><strong>No in-page video is linked for this dish yet</strong><p>You can still follow the full ingredients and cooking method here. This page will not open a separate YouTube tab.</p></div>`;
+    }
+    function cookingTipFor(meal) {
+      const title = normalise(meal.strMeal || "");
+      const category = normalise(meal.strCategory || "");
+      if (/cake|brownie|cookie|muffin|cupcake|cheesecake|pie|tart|bread|bake|dessert/.test(title) || category === "dessert") {
+        return "For the best texture, measure ingredients carefully and avoid overmixing once flour is added. Preheat the oven fully, check doneness near the end of the suggested bake time, and let baked goods cool before slicing or frosting.";
+      }
+      if (/chicken|turkey|roast|beef|lamb|goat|pork|meat/.test(title) || ["chicken", "beef", "lamb", "goat", "pork"].includes(category)) {
+        return "Keep raw meat separate from ready-to-eat foods and wash hands and utensils after handling it. For poultry, check the thickest part reaches 74°C / 165°F; rest roasted meat briefly before slicing to help retain its juices.";
+      }
+      if (/pasta|spaghetti|noodle|ramen|mac and cheese|lasagna|lasagne/.test(title) || category === "pasta") {
+        return "Salt the pasta water, cook until just tender, and save a small cup of the cooking water before draining. Tossing the pasta with its sauce while hot helps the sauce cling more evenly.";
+      }
+      if (/biryani|rice|pulao|risotto/.test(title)) {
+        return "Measure the liquid and rice carefully. Once the rice is covered and steaming, keep the lid closed as much as possible; after cooking, let it rest for 5–10 minutes before gently fluffing.";
+      }
+      return "Read through the method once before you begin, prepare and measure the ingredients, and taste as you go. Add salt and chilli gradually, and make sure ingredients are cooked through before serving.";
+    }
+    function renderRecipe(meal) {
+      currentMeal = meal;
+      currentIngredients = collectIngredients(meal);
+      const instructions = splitInstructions(meal.strInstructions);
+      const image = safeImageURL(meal.strMealThumb || ROAST_IMAGE);
+      const category = String(meal.strCategory || "Recipe");
+      const area = String(meal.strArea || "Kitchen favourite");
+      const sourceLink = meal.strSource && /^https:\/\//i.test(meal.strSource) ? meal.strSource : "";
+      recipeMain.innerHTML = `
+        <div class="recipe-head">
+          <img class="recipe-thumb" src="${escapeHTML(image)}" alt="${escapeHTML(meal.strMeal)}" loading="lazy" />
+          <div>
+            <div class="recipe-kicker"><span class="pill">✦ ${escapeHTML(category)}</span><span class="pill">⌖ ${escapeHTML(area)}</span></div>
+            <h3 class="recipe-title">${escapeHTML(meal.strMeal)}</h3>
+            <p class="recipe-subtitle">A little preparation, a few good ingredients, and something wonderful to share.</p>
+          </div>
+        </div>
+        <div class="recipe-actions">
+          <button type="button" class="secondary-btn" id="readRecipe">🔊 Read recipe aloud</button>
+          <button type="button" class="secondary-btn" id="stopVoice">■ Stop voice</button>
+          <span class="pill">▶ Video stays on this page</span>
+          ${sourceLink ? `<a class="secondary-btn" style="text-decoration:none" href="${escapeHTML(sourceLink)}" target="_blank" rel="noopener noreferrer">↗ Original source</a>` : ""}
+        </div>
+        <div class="recipe-divider"></div>
+        <div class="video-section">
+          <div class="subhead"><h3>Watch & cook</h3><span class="inline-label">▶ Embedded video</span></div>
+          <div class="video-player-area">${buildVideoHTML(meal)}</div>
+        </div>`;
+      renderIngredients();
+      stepsList.innerHTML = instructions.length
+        ? instructions.map((step, index) => `<li><span class="step-number">${index + 1}</span><span>${escapeHTML(step)}</span></li>`).join("")
+        : `<li><span class="step-number">—</span><span>Detailed cooking steps were not provided for this recipe. Use the YouTube search above for a tutorial.</span></li>`;
+      $("#stepCount").textContent = instructions.length + (instructions.length === 1 ? " step" : " steps");
+      const chefTip = $("#chefTip");
+      chefTip.hidden = false;
+      chefTip.innerHTML = `<strong>Chef’s note</strong><p>${escapeHTML(cookingTipFor(meal))}</p>`;
+      $("#readRecipe").addEventListener("click", () => readRecipeAloud(meal, instructions));
+      $("#stopVoice").addEventListener("click", stopVoice);
+      const thumb = recipeMain.querySelector(".recipe-thumb");
+      thumb.addEventListener("error", () => { thumb.src = ROAST_IMAGE_BACKUP; }, { once: true });
+      recipeMain.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    function renderIngredients() {
+      if (!currentIngredients.length) {
+        ingredientsList.innerHTML = '<p style="color:var(--muted);font-size:.88rem;line-height:1.7;margin:10px 0 0;">No ingredient list was supplied for this recipe. Try another result or check the video tutorial.</p>';
+        $("#ingredientCount").textContent = "Not available";
+        copyIngredientsButton.disabled = true;
+        resetIngredientsButton.disabled = true;
+        return;
+      }
+      ingredientsList.innerHTML = currentIngredients.map((item, index) => {
+        const amount = [item.measure, item.ingredient].filter(Boolean).join(" ");
+        return `<label class="ingredient-row"><input type="checkbox" data-ingredient-index="${index}" /><span class="custom-check" aria-hidden="true"></span><span class="ingredient-text">${escapeHTML(amount)}</span></label>`;
+      }).join("");
+      $("#ingredientCount").textContent = `0 / ${currentIngredients.length} checked`;
+      copyIngredientsButton.disabled = false;
+      resetIngredientsButton.disabled = false;
+      ingredientsList.querySelectorAll("input[type=checkbox]").forEach(input => input.addEventListener("change", updateIngredientProgress));
+      updateIngredientProgress();
+    }
+    function updateIngredientProgress() {
+      const boxes = [...ingredientsList.querySelectorAll("input[type=checkbox]")];
+      const checked = boxes.filter(box => box.checked).length;
+      const total = currentIngredients.length;
+      $("#ingredientCount").textContent = `${checked} / ${total} checked`;
+      $("#ingredientProgress").style.width = total ? `${checked / total * 100}%` : "0%";
+    }
+    function normalise(value) { return String(value || "").toLowerCase().replace(/[^a-z0-9\s]/g, " ").replace(/\s+/g, " ").trim(); }
+    function isRelevantMatch(meal, query) {
+      const words = normalise(query).split(" ").filter(word => word.length > 1);
+      const title = normalise(meal.strMeal);
+      return words.every(word => title.includes(word));
+    }
+    async function fetchMeal(query) {
+      const trimmed = String(query || "").trim();
+      const normalizedWords = normalise(trimmed).split(" ").filter(Boolean);
+      const unique = new Map();
+      // Built-in recipes are instant, contain their own ingredients and instructions,
+      // and remain searchable if the online service is offline.
+      [...LOCAL_RECIPES, localRoastChicken].forEach(meal => unique.set(String(meal.idMeal || mealKey(meal)), meal));
+      async function runSearch(term) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 7000);
+        try {
+          const response = await fetch(`${API_BASE}/search.php?s=${encodeURIComponent(term)}`, { signal: controller.signal });
+          if (!response.ok) return;
+          const data = await response.json();
+          (Array.isArray(data.meals) ? data.meals : []).forEach(meal => {
+            if (meal?.idMeal) unique.set(String(meal.idMeal), meal);
+          });
+        } catch { /* Built-in matches still work without a connection. */ }
+        finally { clearTimeout(timeoutId); }
+      }
+      await runSearch(trimmed);
+      if (normalizedWords.length > 1) {
+        await Promise.all(normalizedWords.filter(word => word.length > 2).slice(0, 4).map(word => runSearch(word)));
+      }
+      const queryNorm = normalise(trimmed);
+      const all = [...unique.values()].map(meal => {
+        const title = normalise(meal.strMeal);
+        const hits = normalizedWords.filter(word => title.includes(word)).length;
+        const localBonus = String(meal.idMeal || "").startsWith("local-") ? 3 : 0;
+        const score = (title === queryNorm ? 1000 : 0) + (title.includes(queryNorm) ? 80 : 0) + hits * 10 + localBonus;
+        return { meal, score, hits };
+      }).filter(item => item.hits > 0 || normalise(item.meal.strMeal).includes(queryNorm))
+        .sort((a, b) => b.score - a.score || String(a.meal.strMeal).localeCompare(String(b.meal.strMeal)));
+      latestQueryMeals = all.map(item => item.meal);
+      return latestQueryMeals[0] || null;
+    }
+    async function searchRecipe(query) {
+      const name = String(query || "").trim();
+      if (!name) { setStatus("Enter a recipe name first.", "error"); recipeInput.focus(); return; }
+      stopVoice(); setStatus(""); setLoading(true); activeCardCategory = "Search result";
+      try {
+        const meal = await fetchMeal(name);
+        if (meal) {
+          currentBrowseMode = "search";
+          renderRecipeGrid(latestQueryMeals, `Search results for “${name}”`, `${latestQueryMeals.length} matching recipe${latestQueryMeals.length === 1 ? "" : "s"}`);
+          renderRecipe(meal);
+          setStatus(`Found “${meal.strMeal}”. ${latestQueryMeals.length > 1 ? "Choose another matching dish from the recipe cards above." : "Check off ingredients as you prepare them."}`, "success");
+        } else if (/roast( ed)? chicken|chicken roast/i.test(name)) {
+          latestQueryMeals = [];
+          renderRecipeGrid([], "Your homemade favourite", "Built-in recipe");
+          renderRecipe(localRoastChicken);
+          setStatus("Showing the built-in roast chicken recipe. Your floating roast is still right up top!", "success");
+        } else {
+          renderRecipeGrid([], `No exact result for “${name}”`, "Try another search");
+          recipeMain.innerHTML = `<div class="empty-state"><div class="empty-plate">🔎</div><h3>No recipe match yet</h3><p>We couldn't find “${escapeHTML(name)}” in the recipe database. Try a shorter dish name or choose a category below. Recipe videos are embedded here whenever a direct tutorial is available.</p></div>`;
+          ingredientsList.innerHTML = '<p style="color:var(--muted);font-size:.88rem;line-height:1.7;margin:10px 0 0;">Search for a recipe above to load ingredients.</p>';
+          stepsList.innerHTML = '<li><span class="step-number">—</span><span>No verified steps to show yet. Try another dish or explore the categories.</span></li>';
+          $("#ingredientCount").textContent = "Waiting for recipe"; $("#stepCount").textContent = "0 steps";
+          $("#ingredientProgress").style.width = "0%"; copyIngredientsButton.disabled = true; resetIngredientsButton.disabled = true;
+          currentMeal = null; currentIngredients = [];
+          setStatus("No matching recipe was found. The category explorer has more dishes to try.", "error");
+        }
+      } catch (error) {
+        if (/roast( ed)? chicken|chicken roast/i.test(name)) {
+          renderRecipe(localRoastChicken);
+          setStatus("Couldn't reach the recipe service, so the built-in roast chicken recipe is shown instead. Internet access is needed for online recipes.", "success");
+        } else {
+          renderRecipeGrid([], "Recipe service unavailable", "Check your connection");
+          recipeMain.innerHTML = `<div class="empty-state"><div class="empty-plate">🌐</div><h3>Couldn't load that recipe</h3><p>The recipe database may be temporarily unavailable, or your browser may be offline. Reconnect and try again. Your saved and built-in recipes remain available below.</p></div>`;
+          setStatus("Connection problem: please check your internet and try again.", "error");
+        }
+      } finally { setLoading(false); }
+    }
+
+    function readFavourites() {
+      try { const saved = JSON.parse(localStorage.getItem(FAVOURITES_STORAGE_KEY) || "[]"); return Array.isArray(saved) ? saved : []; }
+      catch { return []; }
+    }
+    function saveFavourites() {
+      try { localStorage.setItem(FAVOURITES_STORAGE_KEY, JSON.stringify(favouriteMeals)); } catch {}
+      $("#favoriteCount").textContent = String(favouriteMeals.length);
+    }
+    function mealKey(meal) { return String(meal?.idMeal || `local-${normalise(meal?.strMeal || "recipe").replace(/\s/g, "-")}`); }
+    function isFavourite(meal) { const id = mealKey(meal); return favouriteMeals.some(item => mealKey(item) === id); }
+    function toggleFavourite(meal) {
+      const id = mealKey(meal);
+      if (favouriteMeals.some(item => mealKey(item) === id)) favouriteMeals = favouriteMeals.filter(item => mealKey(item) !== id);
+      else favouriteMeals.unshift(String(meal.idMeal || "").startsWith("local-")
+        ? { ...meal }
+        : { idMeal: meal.idMeal || "", strMeal: meal.strMeal || "Saved recipe", strMealThumb: meal.strMealThumb || ROAST_IMAGE, strCategory: meal.strCategory || "Recipe" });
+      saveFavourites();
+      if (currentBrowseMode === "favourites") renderRecipeGrid(favouriteMeals, "Your saved recipe box", `${favouriteMeals.length} saved`);
+      else renderRecipeGrid(activeBrowseMeals, $("#browseTitle").textContent, $("#browseCount").textContent, true);
+    }
+    function renderRecipeGrid(meals, title = "Explore recipes", countLabel = "", preserveCount = false) {
+      if (!preserveCount) { activeBrowseMeals = Array.isArray(meals) ? meals : []; visibleBrowseCount = 12; }
+      const grid = $("#recipeGrid");
+      $("#browseTitle").textContent = title;
+      $("#browseCount").textContent = countLabel || `${activeBrowseMeals.length} recipes`;
+      const shown = activeBrowseMeals.slice(0, visibleBrowseCount);
+      if (!shown.length) {
+        grid.innerHTML = `<div class="browse-empty"><b>${escapeHTML(title)}</b><p>Nothing to show here yet. Try another search or pick a different category.</p></div>`;
+        $("#loadMoreBtn").hidden = true;
+        return;
+      }
+      grid.innerHTML = shown.map((meal, index) => {
+        const titleText = meal.strMeal || "Untitled recipe";
+        const image = safeImageURL(meal.strMealThumb || ROAST_IMAGE);
+        const category = meal.strCategory || (currentBrowseMode === "favourites" ? "Saved" : activeCardCategory);
+        const saved = isFavourite(meal);
+        return `<article class="discover-card" style="animation-delay:${Math.min(index % 12, 8) * 35}ms">
+          <div class="discover-image-wrap" data-open-id="${escapeHTML(meal.idMeal || mealKey(meal))}" role="button" tabindex="0" aria-label="Open ${escapeHTML(titleText)}">
+            <img class="discover-image" src="${escapeHTML(image)}" alt="${escapeHTML(titleText)}" loading="lazy" />
+            <span class="card-category">${escapeHTML(category)}</span>
+            <button class="favorite-toggle ${saved ? "saved" : ""}" type="button" data-fav-id="${escapeHTML(meal.idMeal || mealKey(meal))}" aria-label="${saved ? "Remove" : "Save"} ${escapeHTML(titleText)} ${saved ? "from" : "to"} favourites">${saved ? "♥" : "♡"}</button>
+          </div>
+          <div class="discover-card-body"><h4 class="discover-card-title">${escapeHTML(titleText)}</h4><div class="discover-card-bottom"><span class="card-hint">Ingredients & method</span><button type="button" class="open-recipe-btn" data-open-id="${escapeHTML(meal.idMeal || mealKey(meal))}">View recipe ↗</button></div></div>
+        </article>`;
+      }).join("");
+      $("#loadMoreBtn").hidden = activeBrowseMeals.length <= visibleBrowseCount;
+      grid.querySelectorAll("[data-open-id]").forEach(control => {
+        const open = () => openRecipeCard(control.dataset.openId);
+        control.addEventListener("click", open);
+        if (control.getAttribute("role") === "button") control.addEventListener("keydown", event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); } });
+      });
+      grid.querySelectorAll("[data-fav-id]").forEach(button => button.addEventListener("click", event => {
+        event.stopPropagation();
+        const id = button.dataset.favId;
+        const found = activeBrowseMeals.find(meal => String(meal.idMeal || mealKey(meal)) === id) || favouriteMeals.find(meal => String(meal.idMeal || mealKey(meal)) === id) || LOCAL_RECIPE_BY_ID.get(id) || (id === "local-roast-chicken" ? localRoastChicken : null);
+        if (found) toggleFavourite(found);
+      }));
+      grid.querySelectorAll(".discover-image").forEach(img => img.addEventListener("error", () => { img.src = ROAST_IMAGE_BACKUP; }, { once: true }));
+    }
+    async function requestJSON(url) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      try {
+        const response = await fetch(url, { signal: controller.signal });
+        if (!response.ok) throw new Error("Recipe request failed");
+        return await response.json();
+      } finally { clearTimeout(timeoutId); }
+    }
+    const ALL_MEAL_CATEGORIES = ["Beef", "Breakfast", "Chicken", "Dessert", "Goat", "Lamb", "Miscellaneous", "Pasta", "Pork", "Seafood", "Side", "Starter", "Vegan", "Vegetarian"];
+    const CAKE_SEARCH_TERMS = ["cake", "cheesecake", "brownie", "cookie", "muffin", "cupcake", "pie", "tart", "pudding", "pancake", "waffle", "donut", "doughnut", "bread", "scone", "biscuit", "gingerbread", "banana bread"];
+    const BAKING_NAME_PATTERN = /cake|gateau|bake|brownie|cookie|cheesecake|tart|muffin|scone|cupcake|pudding|pie|pancake|waffle|donut|doughnut|bread|biscuit|gingerbread|shortbread|fudge/i;
+
+    function uniqueMeals(groups) {
+      const seen = new Set();
+      return groups.flat().filter(meal => {
+        if (!meal) return false;
+        const id = String(meal.idMeal || normalise(meal.strMeal));
+        if (!id || seen.has(id)) return false;
+        seen.add(id);
+        return true;
+      });
+    }
+    async function mapInBatches(items, batchSize, mapper) {
+      const results = [];
+      for (let index = 0; index < items.length; index += batchSize) {
+        const batch = items.slice(index, index + batchSize);
+        results.push(...await Promise.all(batch.map(mapper)));
+      }
+      return results;
+    }
+    async function getCategoryMeals(category) {
+      if (browseCache.has(category)) return browseCache.get(category);
+      const promise = requestJSON(`${API_BASE}/filter.php?c=${encodeURIComponent(category)}`).then(data => Array.isArray(data.meals) ? data.meals : []);
+      browseCache.set(category, promise);
+      try { return await promise; } catch (error) { browseCache.delete(category); throw error; }
+    }
+    async function getAreaMeals(area) {
+      return requestJSON(`${API_BASE}/filter.php?a=${encodeURIComponent(area)}`).then(data => Array.isArray(data.meals) ? data.meals : []);
+    }
+    async function getSearchMeals(term) {
+      try {
+        const data = await requestJSON(`${API_BASE}/search.php?s=${encodeURIComponent(term)}`);
+        return Array.isArray(data.meals) ? data.meals : [];
+      } catch { return []; }
+    }
+    async function loadBrowse(category = "all") {
+      stopVoice(); currentBrowseMode = "category"; activeCardCategory = category === "all" ? "From around the world" : category; setStatus("");
+      document.querySelectorAll("[data-category]").forEach(button => button.classList.toggle("active", button.dataset.category.toLowerCase() === String(category).toLowerCase()));
+      document.querySelectorAll("[data-area]").forEach(button => button.classList.remove("active"));
+      const grid = $("#recipeGrid"); grid.innerHTML = '<div class="browse-loading"><span class="loader-orbit"></span><b>Finding something delicious…</b><span>Mixing the built-in cookbook with online recipe ideas</span></div>';
+      $("#browseTitle").textContent = category === "all" ? "A little bit of everything" : category;
+      $("#browseCount").textContent = "Loading…"; $("#loadMoreBtn").hidden = true;
+      const localPreview = category === "all"
+        ? [localRoastChicken, ...LOCAL_RECIPES]
+        : category === "Cakes & Bakes"
+          ? LOCAL_RECIPES.filter(meal => BAKING_NAME_PATTERN.test(meal.strMeal || ""))
+          : LOCAL_RECIPES.filter(meal => String(meal.strCategory || "").toLowerCase() === category.toLowerCase());
+      if (localPreview.length) {
+        localPreview.sort((a, b) => String(a.strMeal || "").localeCompare(String(b.strMeal || "")));
+        renderRecipeGrid(localPreview, category === "all" ? "Your growing recipe collection" : `${category} favourites`, `${localPreview.length} built-in recipes`);
+        $("#browseDescription").textContent = "Your built-in recipes are ready now. More dishes from the online catalogue will be added when available.";
+      }
+      try {
+        let meals = [];
+        if (category === "Cakes & Bakes") {
+          const localBakes = LOCAL_RECIPES.filter(meal => BAKING_NAME_PATTERN.test(meal.strMeal || ""));
+          const [searchGroups, dessertMeals] = await Promise.all([
+            mapInBatches(CAKE_SEARCH_TERMS, 4, getSearchMeals),
+            getCategoryMeals("Dessert").catch(() => [])
+          ]);
+          const searched = uniqueMeals([...searchGroups, dessertMeals]).filter(meal => BAKING_NAME_PATTERN.test(meal.strMeal || ""));
+          meals = uniqueMeals([localBakes, searched]);
+        } else if (category === "all") {
+          const groups = await mapInBatches(ALL_MEAL_CATEGORIES, 4, cat => getCategoryMeals(cat).catch(() => []));
+          meals = uniqueMeals([[localRoastChicken, ...LOCAL_RECIPES], ...groups]);
+        } else {
+          const localCategoryMeals = LOCAL_RECIPES.filter(meal => String(meal.strCategory || "").toLowerCase() === category.toLowerCase());
+          const remoteMeals = await getCategoryMeals(category).catch(() => []);
+          meals = uniqueMeals([localCategoryMeals, remoteMeals]);
+        }
+        if (!meals.length) throw new Error("No recipes returned");
+        meals.sort((a, b) => String(a.strMeal || "").localeCompare(String(b.strMeal || "")));
+        renderRecipeGrid(meals, category === "all" ? "A little bit of everything" : category === "Cakes & Bakes" ? "Cakes, bakes & sweet treats" : `${category} favourites`, `${meals.length} recipe ideas`);
+        $("#browseDescription").textContent = category === "all"
+          ? `Browse ${LOCAL_RECIPES.length + 1}+ built-in recipe guides alongside dishes from the online catalogue. Use Show more recipes to keep exploring.`
+          : category === "Cakes & Bakes"
+            ? "Cakes, brownies, cookies, muffins, pies, cheesecakes, breads and sweet treats from the built-in cookbook and online catalogue."
+            : `Browse ${category.toLowerCase()} recipes, then open a card for ingredients and cooking steps.`;
+      } catch (error) {
+        const localOnly = category === "Cakes & Bakes"
+          ? LOCAL_RECIPES.filter(meal => BAKING_NAME_PATTERN.test(meal.strMeal || ""))
+          : category === "all"
+            ? [localRoastChicken, ...LOCAL_RECIPES]
+            : LOCAL_RECIPES.filter(meal => String(meal.strCategory || "").toLowerCase() === category.toLowerCase());
+        if (localOnly.length) {
+          renderRecipeGrid(localOnly, category === "all" ? "Your built-in recipe collection" : `${category} recipes`, `${localOnly.length} offline-ready recipes`);
+          $("#browseDescription").textContent = "These built-in recipes are available even when the online catalogue is unavailable.";
+          setStatus("Showing the built-in cookbook. Reconnect to also browse the online recipe catalogue.", "success");
+        } else {
+          renderRecipeGrid([], "Couldn't load recipe ideas", "Check your connection");
+          setStatus("The recipe catalogue could not be reached. Check your internet connection and try again.", "error");
+        }
+      }
+    }
+    async function loadBrowseArea(area) {
+      stopVoice(); currentBrowseMode = "area"; activeCardCategory = `${area} cuisine`; setStatus("");
+      document.querySelectorAll("[data-category]").forEach(button => button.classList.remove("active"));
+      document.querySelectorAll("[data-area]").forEach(button => button.classList.toggle("active", button.dataset.area.toLowerCase() === String(area).toLowerCase()));
+      $("#recipeGrid").innerHTML = '<div class="browse-loading"><span class="loader-orbit"></span><b>Crossing the flavour map…</b><span>Finding dishes from ' + escapeHTML(area) + '</span></div>';
+      $("#browseTitle").textContent = `${area} cuisine`;
+      $("#browseCount").textContent = "Loading…"; $("#loadMoreBtn").hidden = true;
+      const localPreview = LOCAL_RECIPES.filter(meal => String(meal.strArea || "").toLowerCase() === area.toLowerCase());
+      if (localPreview.length) {
+        renderRecipeGrid(localPreview, `${area} cuisine favourites`, `${localPreview.length} built-in recipes`);
+        $("#browseDescription").textContent = `Built-in ${area} recipes are ready; online matches will be added when available.`;
+      }
+      try {
+        const [remoteMeals, localMeals] = await Promise.all([
+          getAreaMeals(area).catch(() => []),
+          Promise.resolve(LOCAL_RECIPES.filter(meal => String(meal.strArea || "").toLowerCase() === area.toLowerCase()))
+        ]);
+        const meals = uniqueMeals([localMeals, remoteMeals]);
+        if (!meals.length) throw new Error("No recipes returned");
+        renderRecipeGrid(meals, `${area} cuisine favourites`, `${meals.length} recipe ideas`);
+        $("#browseDescription").textContent = `Explore dishes from ${area}. Open any card to see its ingredients and cooking method.`;
+      } catch {
+        renderRecipeGrid([], `No ${area} recipes available`, "Try another cuisine");
+        setStatus(`The free database and built-in cookbook did not return ${area} recipes just now. Try another cuisine or All recipes.`, "error");
+      }
+    }
+    async function searchByIngredient(ingredient) {
+      const clean = String(ingredient || "").trim();
+      if (!clean) return;
+      currentBrowseMode = "ingredient"; activeCardCategory = `With ${clean}`; setStatus("");
+      document.querySelectorAll("[data-category], [data-area]").forEach(button => button.classList.remove("active"));
+      $("#recipeGrid").innerHTML = '<div class="browse-loading"><span class="loader-orbit"></span><b>Searching by ingredient…</b><span>Finding dishes that use ' + escapeHTML(clean) + '</span></div>';
+      try {
+        const apiIngredient = clean.toLowerCase().replace(/[^a-z0-9 ]/g, " ").trim().replace(/\s+/g, "_");
+        const [data] = await Promise.all([requestJSON(`${API_BASE}/filter.php?i=${encodeURIComponent(apiIngredient)}`).catch(() => ({ meals: [] }))]);
+        const onlineMeals = Array.isArray(data.meals) ? data.meals : [];
+        const terms = normalise(clean).split(" ").filter(Boolean);
+        const localMeals = [...LOCAL_RECIPES, localRoastChicken].filter(meal => collectIngredients(meal).some(item => {
+          const ingredientName = normalise(item.ingredient);
+          return terms.some(term => term.length > 1 && ingredientName.includes(term));
+        }));
+        const meals = uniqueMeals([localMeals, onlineMeals]);
+        renderRecipeGrid(meals, `Recipes with ${clean}`, `${meals.length} matching dishes`);
+        setStatus(meals.length ? `Found dishes using ${clean}. Select a card to see its full recipe.` : `No dishes found for ${clean}. Try a simpler ingredient such as chicken, salmon or potato.`, meals.length ? "success" : "error");
+      } catch {
+        const terms = normalise(clean).split(" ").filter(Boolean);
+        const localMeals = [...LOCAL_RECIPES, localRoastChicken].filter(meal => collectIngredients(meal).some(item => terms.some(term => term.length > 1 && normalise(item.ingredient).includes(term))));
+        renderRecipeGrid(localMeals, `Recipes with ${clean}`, `${localMeals.length} built-in matches`);
+        setStatus(localMeals.length ? "Showing built-in recipes. Reconnect for more online matches." : "No built-in matches; please check your connection or try a simpler ingredient.", localMeals.length ? "success" : "error");
+      }
+    }
+    async function openRecipeCard(id) {
+      const source = activeBrowseMeals.find(meal => String(meal.idMeal || mealKey(meal)) === String(id)) || favouriteMeals.find(meal => String(meal.idMeal || mealKey(meal)) === String(id));
+      if (String(id).startsWith("local-")) {
+        const localMeal = LOCAL_RECIPE_BY_ID.get(String(id)) || (String(id) === "local-roast-chicken" ? localRoastChicken : null) || (source && source.strInstructions ? source : null);
+        if (localMeal) { renderRecipe(localMeal); setStatus(`${localMeal.strMeal} is ready with ingredients and cooking steps.`, "success"); return; }
+      }
+      if (!id) return;
+      stopVoice(); setStatus("Loading full recipe details…"); setLoading(true);
+      try {
+        const data = await requestJSON(`${API_BASE}/lookup.php?i=${encodeURIComponent(id)}`);
+        const meal = data.meals?.[0];
+        if (!meal) throw new Error("No full recipe details");
+        renderRecipe(meal); setStatus(`Opened ${meal.strMeal}. Ingredients, instructions and its available video are ready below.`, "success");
+      } catch {
+        setStatus("Couldn't load this recipe's full details. Please try another card.", "error");
+      } finally { setLoading(false); }
+    }
+    async function surpriseMe() {
+      stopVoice(); setStatus("Picking a surprise recipe…");
+      try {
+        let meal = null;
+        try {
+          const data = await requestJSON(`${API_BASE}/random.php`);
+          meal = data.meals?.[0] || null;
+        } catch { /* Use a built-in recipe below when offline. */ }
+        if (!meal) meal = [...LOCAL_RECIPES, localRoastChicken][Math.floor(Math.random() * (LOCAL_RECIPES.length + 1))];
+        renderRecipeGrid([meal, ...activeBrowseMeals.filter(item => String(item.idMeal) !== String(meal.idMeal))], "Your surprise pick", "Fresh inspiration");
+        renderRecipe(meal); setStatus(`Surprise! Today's pick is ${meal.strMeal}.`, "success");
+      } catch { setStatus("Surprise recipes need an internet connection. Try choosing a category instead.", "error"); }
+    }
+    function shuffleList(items) {
+      const shuffled = [...items];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
+    function renderHomepagePicks() {
+      const grid = $("#featuredGrid");
+      if (!grid) return;
+      const picks = shuffleList([localRoastChicken, ...LOCAL_RECIPES]).slice(0, 4);
+      grid.innerHTML = picks.map((meal, index) => {
+        const id = String(meal.idMeal || mealKey(meal));
+        const image = safeImageURL(meal.strMealThumb || ROAST_IMAGE);
+        return `<article class="discover-card" style="animation-delay:${index * 65}ms">
+          <div class="discover-image-wrap" data-home-open-id="${escapeHTML(id)}" role="button" tabindex="0" aria-label="Open ${escapeHTML(meal.strMeal)}">
+            <img class="discover-image" src="${escapeHTML(image)}" alt="Professional food photograph of ${escapeHTML(meal.strMeal)}" loading="lazy" />
+            <span class="featured-random-label">✦ Today’s pick</span>
+            <span class="card-category">${escapeHTML(meal.strCategory || "Recipe")}</span>
+          </div>
+          <div class="discover-card-body"><h4 class="discover-card-title">${escapeHTML(meal.strMeal)}</h4><div class="discover-card-bottom"><span class="card-hint">Ingredients + method</span><button type="button" class="open-recipe-btn" data-home-open-id="${escapeHTML(id)}">Cook this ↗</button></div></div>
+        </article>`;
+      }).join("");
+      grid.querySelectorAll("[data-home-open-id]").forEach(control => {
+        const open = () => { openRecipeCard(control.dataset.homeOpenId); };
+        control.addEventListener("click", open);
+        if (control.getAttribute("role") === "button") control.addEventListener("keydown", event => {
+          if (event.key === "Enter" || event.key === " ") { event.preventDefault(); open(); }
+        });
+      });
+      grid.querySelectorAll(".discover-image").forEach(img => img.addEventListener("error", () => { img.src = ROAST_IMAGE_BACKUP; }, { once: true }));
+    }
+
+    function showSavedRecipes() {
+      currentBrowseMode = "favourites"; activeCardCategory = "Saved";
+      document.querySelectorAll("[data-category], [data-area]").forEach(button => button.classList.remove("active"));
+      renderRecipeGrid(favouriteMeals, "Your saved recipe box", `${favouriteMeals.length} saved recipe${favouriteMeals.length === 1 ? "" : "s"}`);
+      $("#explore").scrollIntoView({ behavior: "smooth", block: "start" });
+      if (!favouriteMeals.length) setStatus("Tap the heart on any recipe card to save it here on this device.", "success");
+    }
+    function readRecipeAloud(meal, instructions) {
+      if (!("speechSynthesis" in window) || !("SpeechSynthesisUtterance" in window)) {
+        setStatus("Voice reading is not supported in this browser. Try the latest version of Chrome or Edge.", "error");
+        return;
+      }
+      stopVoice();
+      const ingredientText = currentIngredients.length
+        ? "Ingredients: " + currentIngredients.map(item => [item.measure, item.ingredient].filter(Boolean).join(" ")).join(". ") + ". "
+        : "";
+      const instructionText = instructions.length
+        ? "Method: " + instructions.map((step, i) => `Step ${i + 1}. ${step}`).join(". ")
+        : "No instructions are available to read.";
+      const utterance = new SpeechSynthesisUtterance(`${meal.strMeal}. ${ingredientText}${instructionText}`);
+      utterance.rate = 0.92;
+      utterance.pitch = 1;
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find(voice => /^en(-|_)/i.test(voice.lang));
+      if (englishVoice) utterance.voice = englishVoice;
+      utterance.onstart = () => setStatus("Reading your recipe aloud… Use Stop voice to end playback.", "success");
+      utterance.onend = () => setStatus("Finished reading. Happy cooking!", "success");
+      utterance.onerror = () => setStatus("Voice playback stopped or could not start on this device.", "error");
+      window.speechSynthesis.speak(utterance);
+    }
+    function stopVoice() {
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    }
+    async function copyShoppingList() {
+      if (!currentIngredients.length) return;
+      const text = `Ingredients for ${currentMeal?.strMeal || "recipe"}\n` + currentIngredients.map(item => `• ${[item.measure, item.ingredient].filter(Boolean).join(" ")}`).join("\n");
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus("Ingredient list copied to your clipboard.", "success");
+      } catch {
+        const textArea = document.createElement("textarea");
+        textArea.value = text; textArea.style.position = "fixed"; textArea.style.opacity = "0";
+        document.body.appendChild(textArea); textArea.select();
+        const copied = document.execCommand("copy"); textArea.remove();
+        setStatus(copied ? "Ingredient list copied to your clipboard." : "Copy isn't available here. You can manually select the ingredient list.", copied ? "success" : "error");
+      }
+    }
+
+    searchForm.addEventListener("submit", event => {
+      event.preventDefault();
+      searchRecipe(recipeInput.value);
+    });
+    document.querySelectorAll("[data-query]").forEach(button => {
+      button.addEventListener("click", () => {
+        recipeInput.value = button.dataset.query;
+        searchRecipe(button.dataset.query);
+      });
+    });
+    document.querySelectorAll("[data-category]").forEach(button => button.addEventListener("click", () => loadBrowse(button.dataset.category)));
+    document.querySelectorAll("[data-area]").forEach(button => button.addEventListener("click", () => loadBrowseArea(button.dataset.area)));
+    $("#ingredientSearchForm").addEventListener("submit", event => { event.preventDefault(); searchByIngredient($("#ingredientInput").value); });
+    $("#surpriseMe").addEventListener("click", surpriseMe);
+    $("#shuffleHomePicks").addEventListener("click", renderHomepagePicks);
+    $("#showFavorites").addEventListener("click", showSavedRecipes);
+    $("#loadMoreBtn").addEventListener("click", () => { visibleBrowseCount += 12; renderRecipeGrid(activeBrowseMeals, $("#browseTitle").textContent, `${Math.min(visibleBrowseCount, activeBrowseMeals.length)} of ${activeBrowseMeals.length} recipes` , true); });
+    saveFavourites();
+    renderHomepagePicks();
+    loadBrowse("all");
+    copyIngredientsButton.addEventListener("click", copyShoppingList);
+    resetIngredientsButton.addEventListener("click", () => {
+      ingredientsList.querySelectorAll("input[type=checkbox]").forEach(input => { input.checked = false; });
+      updateIngredientProgress();
+    });
+    const heroRoast = $("#heroRoast");
+    heroRoast.addEventListener("error", () => { heroRoast.src = ROAST_IMAGE_BACKUP; }, { once: true });
+  </script>
+</body>
+</html>
